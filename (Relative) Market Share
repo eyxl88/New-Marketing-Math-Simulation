@@ -47,9 +47,10 @@ class CommaError(Exception):
     pass
 class DollarSignError(Exception):
     pass
-class PercentError:
+class PercentError(Exception):
     pass
 
+# General function to safely handle user input as 
 def get_user_input(print_message):
     print(print_message, end="")
     user_input = input()
@@ -72,79 +73,61 @@ def get_user_input(print_message):
               user_input = input()
         except DollarSignError as excpt:
               print(excpt)
-              user_input = input()d
+              user_input = input()
         except:
               print("Invalid Entry.")
+    if user_input == "give up":
+        return "give up"
 
+# General class to group and print answer messages as created by instances.
 class AnswerMessages:
+    class_to_print = None
+    company_name = None
     def __init__(self):
         self.correct = None
-        self.try_again
+        self.try_again = "Try again or enter \"give up\" to show the answer."
         self.wrong = None
-    def print_msg(self, boolean):
-        if boolean == True:
+    def print_msg(self, msg):
+        if msg == 1:
             print(self.correct)
-        if boolean == False:
+        if msg == 2:
+            print(self.try_again)
+        if msg == 3:
             print(self.wrong)
 
+# Function to check Relative Market Share for the 2 situations.
 def check_rel_ms(value, class_name):
     value_low = class_name.rel_ms - 0.005
     value_high = class_name.rel_ms + 0.005
+    if value == "give up":
+        rel_ms.print_msg(3)
     if value_low < value < value_high:
-        rel_ms.print_msg(True)
+        rel_ms.print_msg(1)
     else:
-        rel_ms.
-      
-    
-#My Relative Market Share
-print()
-user_my_rel_ms = get_user_input("Enter YOUR company's relative market share as a percentage up to 2 decimal places: ")
-check_answer(user_my_rel_ms, my_company)
+        rel_ms.print_msg(2)
 
-if my_rel_ms_low < user_my_rel_ms < my_rel_ms_high:
-    print(f"Correct! The Relative Market Share is {my_rel_ms:.3f}% (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_my_rel_ms = float(input())
-    if my_rel_ms_low < user_my_rel_ms < my_rel_ms_high:
-         print(f"Correct! The Relative Market Share is {my_rel_ms:.3f}% (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_my_rel_ms = float(input())
-         if my_rel_ms_low < user_my_rel_ms < my_rel_ms_high:
-              print(f"Correct! The Relative Market Share is {my_rel_ms:.3f}% (3 decimal places for reference).")
-         else:
-              print(f"The correct Relative Market Share was {my_rel_ms:.3f}% rounded up or down as necessary.")
-              print(f"Relative Market Share is your sales in dollars divided by your lead competitor's sales in dollars.")
-              print(f"In this case, that is {my_sales_dollars} / {lead_sales_dollars} * 100 to convert to a percent.")
-              print(f"You can ignore other companies besides the company the question is asking for and the lead competitor.")
+rel_ms = AnswerMessages()
+rel_ms.correct = f"Correct! The Relative Market Share is {class_to_print.rel_ms:.3f}% (3 decimal places for reference)."
+rel_ms.wrong = f"The correct Relative Market Share was {class_to_print.rel_ms:.3f}% rounded up or down as necessary." \
+              f"Relative Market Share is {company_name} sales in dollars divided by the lead competitor's sales in dollars." \
+              f"In this case, that is {class_to_print.sales_dollars} / {lead_competition.sales_dollars} * 100 to convert to a percent." \
+              f"You can ignore other companies besides the company the question is asking for and the lead competitor."
+
+#My Relative Market Share Setup
+print()
+AnswerMessages.class_to_print = my_company
+AnswerMessages.company_name = "your company's"
+user_my_rel_ms = get_user_input("Enter YOUR company's relative market share as a percentage up to 2 decimal places: ")
+check_rel_ms(user_my_rel_ms, my_company)
 
 # Competitor's Relative Market Share
 print()
-user_competitor_rel_ms = float(input("Enter Company B's relative market share as a percentage: "))
+AnswerMessages.class_to_print = competitor
+AnswerMessages.company_name = "Company B's"
+user_competitor_rel_ms = get_user_input("Enter Company B's relative market share as a percentage: ")
+check_rel_ms(user_competitor_rel_ms, competitor)
 
-competitor_rel_ms_low = competitor_rel_ms - 0.005
-competitor_rel_ms_high = competitor_rel_ms + 0.005
-
-if competitor_rel_ms_low < user_competitor_rel_ms < competitor_rel_ms_high:
-    print(f"Correct! Company B's Relative Market Share is {competitor_rel_ms:.3f}% (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_my_rel_ms = float(input())
-    if competitor_rel_ms_low < user_competitor_rel_ms < competitor_rel_ms_high:
-         print(f"Correct! Company B's Relative Market Share is {competitor_rel_ms:.3f}% (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_my_rel_ms = float(input())
-         if competitor_rel_ms_low < user_competitor_rel_ms < competitor_rel_ms_high:
-              print(f"Correct! Company B's Relative Market Share is {competitor_rel_ms:.3f}% (3 decimal places for reference).")
-         else:
-              print(f"The correct Relative Market Share for Company B was {competitor_rel_ms:.3f}% rounded up or down as necessary.")
-              print(f"Company B's Relative Market Share is Company B's sales in dollars divided by the lead competitor's sales in dollars.")
-              print(f"In this case, that is {competitor_sales_dollars} / {lead_sales_dollars} * 100 to convert to a percent.")
-              print(f"You can ignore other companies besides Company B and the lead competitor.")
-
-
+# End of Revisions, work below line__________________________________________________________
 # Market Growth Rate
 print()
 print(f"Last year's total sales in the industry were: ${last_year_sales}")
