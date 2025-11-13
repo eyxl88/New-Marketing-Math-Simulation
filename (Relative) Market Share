@@ -28,24 +28,23 @@ class TotalInfo:
         self.sales_dollars = my_company.sales_dollars + lead_competition.sales_dollars + competitor.sales_dollars
         self.last_year_sales = self.sales_dollars + change_in_sales
         self.market_growth_rate = ((self.sales_dollars - last_year_sales) / last_year_sales) * 100
-        self.segment_a_dollars = random.randint(# FIND ME)
 
 total = TotalInfo()
 
 class Segment:
-    def __init__(self):
-        self.percent = random.randint(50,99)
+    def __init__(self, percent):
+        self.percent = percent
         self.dollars = self.percent * total.sales_dollars
 
-segment_a = Segment()
-segment_b = Segment()
+segment_a = Segment(random.randint(50,99))
+segment_b = Segment(100 - segment_a.percent)
 
 class ProblemAnswers:
-    def __init__(self, class_name):
+    def __init__(self, class_name, chosen_segment=segment_a):
         self.rel_ms = class_name.sales_dollars / lead_competitor.sales_dollars * 100
         self.ms_dollars = class_name.sales_dollars / total.sales_dollars * 100
         self.ms_units = class_name.sales_units / total.sales_units * 100
-        self.ms_seg = class_name.sales_dollars / segment_a.dollars * 100
+        self.ms_seg = class_name.sales_dollars / chosen_segment.dollars * 100
 
 my_answers = ProblemAnswers(my_company)
 competitor_answers = ProblemAnswers(competitor)
@@ -83,6 +82,7 @@ def get_user_input(print_message, float_or_int):
                 raise DollarSignError("Invalid Input. Do not enter the $ sign.")
             user_input = float_or_int(user_input)
             return user_input
+            break
 
         except CommaError as excpt:
               print(excpt)
@@ -144,7 +144,7 @@ print()
 rel_ms.class_to_print = my_company
 rel_ms.company_name = "your company's"
 user_my_rel_ms = get_user_input("Enter YOUR company's relative market share as a percentage up to 2 decimal places: ", float)
-check_float_value(user_my_rel_ms, my_company.rel_ms, rel_ms)
+check_float_value(user_my_rel_ms, my_answers.rel_ms, rel_ms)
 
 # Competitor's Relative Market Share
 print()
@@ -188,42 +188,29 @@ while completion == False:
     user_market_growth = get_input("Enter the market growth/shrink rate as a percentage rounded to 2 decimal places: ", float)
     check_float_value(user_market_growth, total.market_growth_rate, market_growth)
 
-# Segment Targeting
+# Segment Targeting Problem Printing
 print()
 print("Assume that your company will target a subset of the Market, Segment A. Find the Market Share then for your company.")
 print(f"Your Company's total sales are ${my_company.sales_dollars:.2f}. Use the previous calculated number for this year's sales.")
-print(f"Segment A is {segment_a}% of the market.")
+print(f"Segment A is {segment_a.percent}% of the market.")
 
 # Set up Answer Messages:
 ms_sega = AnswerMessages()
-ms_sega.correct = # FINISH ME
+ms_sega.correct = f"Correct! The Market Share for Your Company in Segment A is {segment_a.market_share:.2f}%."
+ms_sega.wrong = f"The correct Market Share for Your Company in Segment A was {my_answers.ms_sega:.3f}% rounded up or down as necessary.")
+    f"Market Share within a segment is your sales in dollars divided by total sales in that segment in dollars.\n" \
+    f"Total sales in Segment A is Segment A's percent of the market / 100 * total market sales in dollars.\n" \
+    f"In this case, that is {segment_a.percent} / 100 * {total.sales_dollars} = {segment_a.dollars:.2f}.\n" \
+    f"Then, Market Share is {my_company.sales_dollars:.2f} / {segment_a.dollars:.2f} * 100 to convert to a percent."
 
+# Check the Answers for Your Company's Market Share of Segment A.
 print()
 completion = False
 while completion == False:
     user_my_ms_sega = get_input("Enter YOUR company's market share in Segment A as a percentage up to 2 decimal places: ", float)
-    check_float_value(user_my_ms_sega, my_company.ms_sega, ms_sega)
-my_ms_sega_low = my_ms_sega - 0.005
-my_ms_sega_high = my_ms_sega + 0.005
+    check_float_value(user_my_ms_sega, my_answers.market_share, ms_sega)
 
-if my_ms_sega_low < user_my_ms_sega < my_ms_sega_high:
-    print(f"Correct! The Market Share for Your Company in Segment A is {my_ms_sega:.3f}% (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_my_ms_sega = float(input())
-    if my_ms_sega_low < user_my_ms_sega < my_ms_sega_high:
-         print(f"Correct! The Market Share for Your Company in Segment A is {my_ms_sega:.3f}% (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_my_ms_sega = float(input())
-         if my_ms_sega_low < user_my_ms_sega < my_ms_sega_high:
-              print(f"Correct! The Market Share for Your Company in Segment A is {my_ms_sega:.3f}% (3 decimal places for reference).")
-         else:
-              print(f"The correct Market Share for Your Company in Segment A was {my_ms_sega:.3f}% rounded up or down as necessary.")
-              print(f"Market Share within a segment is your sales in dollars divided by total sales in that segment in dollars.")
-              print(f"Total sales in Segment A is Segment A's percent of the market / 100 * total market sales in dollars. ")
-              print(f"In this case, that is {segment_a} / 100 * {total_sales_dollars} = {segment_a_dollars:.2f}.")
-              print(f"Then, Market Share is {my_sales_dollars} / {segment_a_dollars:.2f} * 100 to convert to a percent.")
+# FINISHED REVISIONS UP UNTIL AREA BELOW ______________________________________________
 
 #Change Problem Values:
 my_sales_units = random.randint(50000,100000)
