@@ -9,32 +9,47 @@ class CompanyInfo:
         self.selling_price = random.randint(price_lower, price_higher)
         self.sales_dollars = self.sales_units * self.selling_price
 
-    change_in_sales = random.randint(1000, 100000)
-    plus_minus = random.randint(0,1)
-    if plus_minus == 0:
-        change_in_sales = -change_in_sales
-
 my_company = CompanyInfo(50000, 100000, 2, 10)
 lead_competition = CompanyInfo(200000, 400000, 6, 18)
 competitor = CompanyInfo(8000, 20000, 2, 10)
+
+# Useful Randomized Sign Function
+def random_sign(value):
+    plus_minus = random.randint(0,1)
+    if plus_minus == 0:
+        value = -value
+    return value
+
+change_in_sales = random_sign(random.randint(1000, 100000))
 
 class TotalInfo:
     def __init__(self):
         self.sales_units = my_company.sales_units + lead_competition.sales_units + competitor.sales_units
         self.sales_dollars = my_company.sales_dollars + lead_competition.sales_dollars + competitor.sales_dollars
+        self.last_year_sales = self.sales_dollars + change_in_sales
+        self.market_growth_rate = ((self.sales_dollars - last_year_sales) / last_year_sales) * 100
+        self.segment_a_dollars = random.randint(# FIND ME)
+
+total = TotalInfo()
+
+class Segment:
+    def __init__(self):
+        self.percent = random.randint(50,99)
+        self.dollars = self.percent * total.sales_dollars
+
+segment_a = Segment()
+segment_b = Segment()
 
 class ProblemAnswers:
     def __init__(self, class_name):
         self.rel_ms = class_name.sales_dollars / lead_competitor.sales_dollars * 100
         self.ms_dollars = class_name.sales_dollars / total.sales_dollars * 100
         self.ms_units = class_name.sales_units / total.sales_units * 100
+        self.ms_seg = class_name.sales_dollars / segment_a.dollars * 100
 
 my_answers = ProblemAnswers(my_company)
 competitor_answers = ProblemAnswers(competitor)
 lead_answers = ProblemAnswers(lead_competition)
-
-last_year_sales = total_sales_dollars + change_in_sales
-market_growth_rate = ((total_sales_dollars - last_year_sales) / last_year_sales) * 100
 
 # Relative Market Share # Didn't change because I'm just cleaning up back end code.
 print(f"Company:\t\tSales in dollars ($)")
@@ -162,29 +177,32 @@ while completion == False:
 
 # Set up Answer Messages for Market Growth.
 market_growth = AnswerMessages()
-market_growth.correct = f"Correct! The Market Growth Rate is {market_growth:.2f}%."
-market_growth.wrong = f"The correct Market Growth Rate was {market_growth:.2f}%.\n" \
+market_growth.correct = f"Correct! The Market Growth Rate is {total.market_growth_rate:.2f}%."
+market_growth.wrong = f"The correct Market Growth Rate was {total.market_growth_rate:.2f}%.\n" \
               f"Market Growth Rate is (this year's sales - last year's sales) divided by last year's sales in dollars." \
-              f"In this case, that is {total.sales_dollars} - {last_year_sales} / {last_year_sales} * 100 to convert to a percent."
+              f"In this case, that is {total.sales_dollars} - {total.last_year_sales} / {total.last_year_sales} * 100 to convert to a percent."
 
 # User Market Growth Calls Etc.
 completion = False
 while completion == False:
     user_market_growth = get_input("Enter the market growth/shrink rate as a percentage rounded to 2 decimal places: ", float)
-    check_float_value(user_market_growth, market_growth_rate, market_growth)
+    check_float_value(user_market_growth, total.market_growth_rate, market_growth)
 
 # Segment Targeting
 print()
 print("Assume that your company will target a subset of the Market, Segment A. Find the Market Share then for your company.")
-print(f"Your Company's total sales are ${my_sales_dollars:.2f}. Use the previous calculated number for this year's sales.")
-segment_a = random.randint(50,99)
+print(f"Your Company's total sales are ${my_company.sales_dollars:.2f}. Use the previous calculated number for this year's sales.")
 print(f"Segment A is {segment_a}% of the market.")
-segment_a_dollars = segment_a / 100 * total_sales_dollars
-my_ms_sega = my_sales_dollars / segment_a_dollars * 100
+
+# Set up Answer Messages:
+ms_sega = AnswerMessages()
+ms_sega.correct = # FINISH ME
 
 print()
-user_my_ms_sega = float(input("Enter YOUR company's market share in Segment A as a percentage up to 2 decimal places: "))
-
+completion = False
+while completion == False:
+    user_my_ms_sega = get_input("Enter YOUR company's market share in Segment A as a percentage up to 2 decimal places: ", float)
+    check_float_value(user_my_ms_sega, my_company.ms_sega, ms_sega)
 my_ms_sega_low = my_ms_sega - 0.005
 my_ms_sega_high = my_ms_sega + 0.005
 
