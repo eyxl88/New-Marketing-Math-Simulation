@@ -150,8 +150,10 @@ print()
 rel_ms.company_class = my_company
 rel_ms.ans_class = my_answers
 rel_ms.company_name = "your company's"
-user_my_rel_ms = get_user_input("Enter YOUR company's relative market share as a percentage up to 2 decimal places: ", float)
-check_float_value(user_my_rel_ms, my_answers.rel_ms, rel_ms)
+completion = False
+while completion == False:
+    user_my_rel_ms = get_user_input("Enter YOUR company's relative market share as a percentage up to 2 decimal places: ", float)
+    check_float_value(user_my_rel_ms, my_answers.rel_ms, rel_ms)
 
 # Competitor's Relative Market Share
 print()
@@ -161,7 +163,7 @@ rel_ms.company_name = "Company B's"
 completion = False
 while completion == False:
     user_competitor_rel_ms = get_user_input("Enter Company B's relative market share as a percentage: ", float)
-    check_float_value(user_competitor_rel_ms, competitor.rel_ms, rel_ms)
+    check_float_value(user_competitor_rel_ms, competitor_answers.rel_ms, rel_ms)
 
 # Market Growth Rate Problem Printing:
 print()
@@ -204,8 +206,8 @@ print(f"Segment A is {segment_a.percent}% of the market.")
 
 # Set up Answer Messages:
 ms_sega = AnswerMessages()
-ms_sega.correct = f"Correct! The Market Share for Your Company in Segment A is {segment_a.market_share:.2f}%."
-ms_sega.wrong = f"The correct Market Share for Your Company in Segment A was {my_answers.ms_sega:.3f}% rounded up or down as necessary." \
+ms_sega.correct = f"Correct! The Market Share for Your Company in Segment A is {my_answers.ms_seg:.2f}%."
+ms_sega.wrong = f"The correct Market Share for Your Company in Segment A was {my_answers.ms_seg:.3f}% rounded up or down as necessary." \
     f"Market Share within a segment is your sales in dollars divided by total sales in that segment in dollars.\n" \
     f"Total sales in Segment A is Segment A's percent of the market / 100 * total market sales in dollars.\n" \
     f"In this case, that is {segment_a.percent} / 100 * {total.sales_dollars} = {segment_a.dollars:.2f}.\n" \
@@ -216,7 +218,7 @@ print()
 completion = False
 while completion == False:
     user_my_ms_sega = get_user_input("Enter YOUR company's market share in Segment A as a percentage up to 2 decimal places: ", float)
-    check_float_value(user_my_ms_sega, my_answers.market_share, ms_sega)
+    check_float_value(user_my_ms_sega, my_answers.ms_seg, ms_sega)
 
 # FINISHED REVISIONS UP UNTIL AREA BELOW ______________________________________________
 
