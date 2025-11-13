@@ -117,6 +117,7 @@ class AnswerMessages:
         if msg == 2:
             print(self.try_again)
         if msg == 3:
+            print()
             print(self.wrong)
 
 # Function to check float values.
@@ -207,7 +208,7 @@ print(f"Segment A is {segment_a.percent}% of the market.")
 # Set up Answer Messages:
 ms_sega = AnswerMessages()
 ms_sega.correct = f"Correct! The Market Share for Your Company in Segment A is {my_answers.ms_seg:.2f}%."
-ms_sega.wrong = f"The correct Market Share for Your Company in Segment A was {my_answers.ms_seg:.3f}% rounded up or down as necessary." \
+ms_sega.wrong = f"The correct Market Share for Your Company in Segment A was {my_answers.ms_seg:.3f}% rounded up or down as necessary.\n" \
     f"Market Share within a segment is your sales in dollars divided by total sales in that segment in dollars.\n" \
     f"Total sales in Segment A is Segment A's percent of the market / 100 * total market sales in dollars.\n" \
     f"In this case, that is {segment_a.percent} / 100 * {total.sales_dollars} = {segment_a.dollars:.2f}.\n" \
