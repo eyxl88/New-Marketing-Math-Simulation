@@ -196,7 +196,8 @@ market_size_units.wrong = f"The correct market size in units was {market_size_un
             f"In this case, that will be {my_company.sales_units} + {competitor.sales_units} * {lead_competition.sales_units}.\n"
 
 long_question = LongQuestion()
-self.question_type = "units"
+long_question.question_type = "units"
+long_question.show_
 long_question.print_question()
 
 print()
