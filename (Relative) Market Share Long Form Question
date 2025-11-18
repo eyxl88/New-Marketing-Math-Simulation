@@ -1,1 +1,466 @@
-# Finish Revisions here./
+print(f"Welcome to the Market Share and Market Size\n")
+
+global completion
+
+import random
+
+class CompanyInfo:
+
+    def __init__(self, lower_sales_units, upper_sales_units, price_lower, price_higher):
+        self.sales_units = random.randint(lower_sales_units, upper_sales_units)
+        self.selling_price = random.randint(price_lower, price_higher)
+        self.sales_dollars = self.sales_units * self.selling_price
+
+my_company = CompanyInfo(50000, 100000, 2, 10)
+lead_competition = CompanyInfo(200000, 400000, 6, 18)
+competitor = CompanyInfo(8000, 20000, 2, 10)
+
+# Useful Randomized Sign Function
+def random_sign(value):
+    plus_minus = random.randint(0,1)
+    if plus_minus == 0:
+        value = -value
+    return value
+
+change_in_sales = random_sign(random.randint(1000, 100000))
+
+class TotalInfo:
+    def __init__(self):
+        self.sales_units = my_company.sales_units + lead_competition.sales_units + competitor.sales_units
+        self.sales_dollars = my_company.sales_dollars + lead_competition.sales_dollars + competitor.sales_dollars
+        self.last_year_sales = self.sales_dollars + change_in_sales
+        self.market_growth_rate = ((self.sales_dollars - last_year_sales) / last_year_sales) * 100
+
+total = TotalInfo()
+
+class Segment:
+    def __init__(self, percent):
+        self.percent = percent
+        self.dollars = self.percent * total.sales_dollars
+
+segment_a = Segment(random.randint(50,99))
+segment_b = Segment(100 - segment_a.percent)
+
+class ProblemAnswers:
+    def __init__(self, class_name, chosen_segment=segment_a):
+        self.rel_ms = class_name.sales_dollars / lead_competition.sales_dollars * 100
+        self.ms_dollars = class_name.sales_dollars / total.sales_dollars * 100
+        self.ms_units = class_name.sales_units / total.sales_units * 100
+        self.ms_seg = class_name.sales_dollars / chosen_segment.dollars * 100
+
+my_answers = ProblemAnswers(my_company)
+competitor_answers = ProblemAnswers(competitor)
+lead_answers = ProblemAnswers(lead_competition)
+
+# Relative Market Share # Didn't change because I'm just cleaning up back end code.
+print(f"Company:\t\tSales in dollars ($)")
+print("_" * 50)
+print(f"You:\t\t\t${my_company.sales_dollars:,d}")
+print(f"Company B:\t\t${competitor.sales_dollars:,d}")
+print(f"Lead Competitor:\t${lead_competition.sales_dollars:,d}")
+
+# Create appropriate exception classes for common input errors.
+class CommaError(Exception):
+    def __init__(self, value):
+        self.value = value
+class DollarSignError(Exception):
+    def __init__(self, value):
+        self.value = value
+class PercentError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+# General function to safely handle user input so the program does not break so easily.
+def get_user_input(print_message, float_or_int):
+    print(print_message, end="")
+    user_input = input()
+    while user_input != "give up":
+        try:
+            if "," in user_input:
+                raise CommaError("Invalid input. Do not enter the , sign")
+            if "%" in user_input:
+                raise PercentError("Invalid input. Do not enter the % sign.")
+            if "$" in user_input:
+                raise DollarSignError("Invalid Input. Do not enter the $ sign.")
+            user_input = float_or_int(user_input)
+            return user_input
+            break
+
+        except CommaError as excpt:
+              print(excpt)
+              user_input = input()
+        except PercentError as excpt:
+              print(excpt)
+              user_input = input()
+        except DollarSignError as excpt:
+              print(excpt)
+              user_input = input()
+        except:
+              print("Invalid Entry.")
+              user_input = input()
+    if user_input == "give up":
+        return "give up"
+
+# General class to group and print answer messages as created by instances.
+class AnswerMessages:
+    company_class = None
+    ans_class = None
+    company_name = None
+    def __init__(self):
+        self.correct = None
+        self.input_precursor = ""
+        self.try_again = "Try again or enter \"give up\" to show the answer: {self.input_precursor}"
+        self.wrong = None
+    def print_msg(self, msg):
+        if msg == 1:
+            print(self.correct)
+        if msg == 2:
+            print(self.try_again)
+        if msg == 3:
+            print()
+            print(self.wrong)
+
+# Function to check float values.
+
+def check_float_value(user_val, value_to_check, instance_name):
+    global completion
+    value_low = value_to_check - 0.005
+    value_high = value_to_check + 0.005
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif value_low < user_val < value_high:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
+# Set up generic answer messages for Relative Market Share.
+rel_ms = AnswerMessages()
+company_class = my_company # Default so that program doesn't break.
+ans_class = my_answers # Default so that program doesn't break.
+company_name = "" # Default
+rel_ms.correct = f"Correct! The Relative Market Share is {ans_class.rel_ms:.3f}% (3 decimal places for reference).\n" 
+rel_ms.wrong = f"The correct Relative Market Share was {ans_class.rel_ms:.3f}% rounded up or down as necessary.\n" \
+              f"Relative Market Share is {company_name} sales in dollars divided by the lead competitor's sales in dollars.\n" \
+              f"In this case, that is {company_class.sales_dollars} / {lead_competition.sales_dollars} * 100 to convert to a percent.\n" \
+              f"You can ignore other companies besides the company the question is asking for and the lead competitor."
+
+# My Relative Market Problem Share (Call functions and Set up custom input variables for the answer printing)
+print()
+rel_ms.company_class = my_company
+rel_ms.ans_class = my_answers
+rel_ms.company_name = "your company's"
+completion = False
+while completion == False:
+    user_my_rel_ms = get_user_input("Enter YOUR company's relative market share as a percentage up to 2 decimal places: ", float)
+    check_float_value(user_my_rel_ms, my_answers.rel_ms, rel_ms)
+
+# Competitor's Relative Market Share
+print()
+rel_ms.company_class = competitor
+rel_ms.ans_class = competitor_answers
+rel_ms.company_name = "Company B's"
+completion = False
+while completion == False:
+    user_competitor_rel_ms = get_user_input("Enter Company B's relative market share as a percentage: ", float)
+    check_float_value(user_competitor_rel_ms, competitor_answers.rel_ms, rel_ms)
+
+# Market Growth Rate Problem Printing:
+print()
+print(f"Last year's total sales in the industry were: ${total.last_year_sales}")
+print(f"Calculate this year's total sales based on the previously provided information.")
+print(f"Assume there are no competitors in the market besides Your Company, Company B, and the Lead Competitor.")
+
+# Set up Answer Messages for Total Sales Question.
+total_sales = AnswerMessages()
+total_sales.correct = f"Correct! The total sales in the industry fot this year is ${total.sales_dollars}."
+total_sales.input_precursor = "$"
+total_sales.wrong = f"The correct total sales was ${total.sales_dollars}.\n" \
+            f"This is Your Company's sales {my_company.sales_dollars} + Company B's Sales {competitor.sales_dollars} " \
+            f"+ Lead Competitor's Sales {lead_competition.sales_dollars}"
+
+# Total Sales question section.
+completion = False
+while completion == False:
+    user_total_sales = get_user_input("$", float)
+    check_float_value(user_total_sales, total.sales_dollars, total_sales)
+
+# Set up Answer Messages for Market Growth.
+market_growth = AnswerMessages()
+market_growth.correct = f"Correct! The Market Growth Rate is {total.market_growth_rate:.2f}%."
+market_growth.wrong = f"The correct Market Growth Rate was {total.market_growth_rate:.2f}%.\n" \
+              f"Market Growth Rate is (this year's sales - last year's sales) divided by last year's sales in dollars." \
+              f"In this case, that is {total.sales_dollars} - {total.last_year_sales} / {total.last_year_sales} * 100 to convert to a percent."
+
+# User Market Growth Calls Etc.
+completion = False
+while completion == False:
+    user_market_growth = get_user_input("Enter the market growth/shrink rate as a percentage rounded to 2 decimal places: ", float)
+    check_float_value(user_market_growth, total.market_growth_rate, market_growth)
+
+# Missing Value Market Share and Size
+
+def print_long_question(): # Fix this up later
+    print()
+    print(f"Company:\t\tSales (units)\tMarket Share %")
+    print("_" * 50)
+    print(f"Your Company:\t\t{my_sales_units}\t\t??")
+    print(f"Company B:\t\t{competitor_sales_units}\t\t??")
+    print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
+    print(f"Market Size (units):\t??\t\t100%")  
+
+# Set Up Answer Messages for Market Size Question
+market_size_units = AnswerMessages()
+market_size_units.correct = f"Correct. The market size in units is {market_size_units} units.\n"
+market_size_units.wrong = f"The correct market size in units was {market_size_units} units.\n" \
+            f"Add Your Company's sales in units to Company B's sales in Units to the Lead Competitor's sales in units.\n" \
+            f"In this case, that will be {my_company.sales_units} + {competitor.sales_units} * {lead_competition.sales_units}.\n"
+
+REVISIONS CURRENTLY HERE
+print()
+print("Assume only you, company B, and the lead competitor are in this industry.")
+completion = False
+while completion == False:
+    user_market_size_units = get_user_input("Enter the total market size in units here: ", int)
+    check_exact_value(user_market_size_units, total.market_size_units, )
+
+if user_market_size_units == market_size_units:
+    print(f"Correct. The market size in units is {market_size_units} units.")
+else:
+    print("Try again.")
+    user_market_size_units = int(input("Enter the total market size in units here: "))
+    if user_market_size_units == market_size_units:
+        print(f"Correct. The market size in units is {market_size_units} units.")
+    else:
+        print("Try again. Last try.")
+        user_lead_sales_dollars = int(input("Enter the Lead Competitor's Total Sales to the nearest dollar: $"))
+        if user_market_size_units == market_size_units:
+            print(f"Correct. The market size in units is {market_size_units} units.")
+        else:
+            print(f"The correct market size in units was {market_size_units} units.")
+            print("Add Your Company's sales in units to Company B's sales in Units to the Lead Competitor's sales in units.")
+            print(f"In this case, that will be {my_sales_units} + {competitor_sales_units} * {lead_competition_sales_units}.")
+
+print()
+print("Updated version of the question:")
+print()
+print(f"Company:\t\tSales (units)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t{my_sales_units}\t\t??")
+print(f"Company B:\t\t{competitor_sales_units}\t\t??")
+print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
+print(f"Market Size (units):\t{market_size_units}\t\t100%")
+
+# Finding Your Market Share in Units
+print()
+user_my_ms_units = float(input("Enter YOUR company's market share in units as a percentage up to 2 decimal places: "))
+
+my_ms_units_low = my_ms_units - 0.005
+my_ms_units_high = my_ms_units + 0.005
+
+if my_ms_units_low < user_my_ms_units < my_ms_units_high:
+    print(f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_my_ms_units = float(input())
+    if my_ms_units_low < user_my_ms_units < my_ms_units_high:
+         print(f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_my_ms_units = float(input())
+         if my_ms_units_low < user_my_ms_units < my_ms_units_high:
+              print(f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference).")
+         else:
+              print(f"The correct Market Share in units for Your Company was {my_ms_units:.3f}% rounded up or down as necessary.")
+              print(f"The Market Share of Your Company is your sales in units divided by total sales in units.")
+              print(f"In this case, that is {my_sales_units} / {market_size_units} * 100 to convert to a percent.")
+
+print()
+print("Updated version of the question:")
+print()
+print(f"Company:\t\tSales (units)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t{my_sales_units}\t\t{my_ms_units:.3f}%")
+print(f"Company B:\t\t{competitor_sales_units}\t\t??")
+print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
+print(f"Market Size (units):\t{market_size_units}\t\t100%")
+
+# Company B Market Share
+
+print()
+user_competitor_ms_units = float(input("Enter Company B's market share in units as a percentage up to 2 decimal places: "))
+
+competitor_ms_units_low = competitor_ms_units - 0.005
+competitor_ms_units_high = competitor_ms_units + 0.005
+
+if competitor_ms_units_low < user_competitor_ms_units < competitor_ms_units_high:
+    print(f"Correct! Company B's Market Share is {competitor_ms_units:.3f}% (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_competitor_ms_units = float(input())
+    if competitor_ms_units_low < user_competitor_ms_units < competitor_ms_units_high:
+         print(f"Correct! Company B's Market Share is {competitor_ms_units:.3f}% (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_competitor_ms_units = float(input())
+         if competitor_ms_units_low < user_competitor_ms_units < competitor_ms_units_high:
+              print(f"Correct! Company B's Market Share is {competitor_ms_units:.3f}% (3 decimal places for reference).")
+         else:
+              print(f"The correct Market Share in units for Company B was {competitor_ms_units:.3f}% rounded up or down as necessary.")
+              print(f"The Market Share of Company B is Company B's sales in units divided by total sales in units.")
+              print(f"In this case, that is {competitor_sales_units} / {market_size_units} * 100 to convert to a percent.")
+
+print()
+print("Updated version of the question:")
+print()
+print(f"Company:\t\tSales (units)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t{my_sales_units}\t\t{my_ms_units:.3f}%")
+print(f"Company B:\t\t{competitor_sales_units}\t\t{competitor_ms_units:.3f}%")
+print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
+print(f"Market Size (units):\t{market_size_units}\t\t100%")
+
+# Lead Competitor Market Share
+
+print()
+user_lead_ms_units = float(input("Enter the Lead Competitor's market share in units as a percentage up to 2 decimal places: "))
+
+lead_ms_units_low = lead_ms_units - 0.005
+lead_ms_units_high = lead_ms_units + 0.005
+
+if lead_ms_units_low < user_lead_ms_units < lead_ms_units_high:
+    print(f"Correct! The Lead Competitor's Market Share is {lead_ms_units_units:.3f}% (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_lead_ms_units = float(input())
+    if lead_ms_units_low < user_lead_ms_units < lead_ms_units_high:
+         print(f"Correct! The Lead Competitor's Market Share is {lead_ms_units_units:.3f}% (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_lead_ms_units = float(input())
+         if lead_ms_units_low < user_lead_ms_units < lead_ms_units_high:
+              print(f"Correct! The Lead Competitor's Market Share is {lead_ms_units_units:.3f}% (3 decimal places for reference).")
+         else:
+              print(f"The correct Market Share in units for the Lead Competitor was {lead_ms_units:.3f}% rounded up or down as necessary.")
+              print(f"The Market Share of the Lead Competitor is the Lead Competitor's sales in units divided by total sales in units.")
+              print(f"In this case, that is {lead_competition_sales_units} / {market_size_units} * 100 to convert to a percent.")
+
+print()
+print("Completed version of the question:")
+print()
+print(f"Company:\t\tSales (units)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t{my_sales_units}\t\t{my_ms_units:.3f}%")
+print(f"Company B:\t\t{competitor_sales_units}\t\t{competitor_ms_units:.3f}%")
+print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t{lead_ms_units:.3f}%")
+print(f"Market Size (units):\t{market_size_units}\t\t100%")
+print("Good job!")
+
+# Dollars Problem Setup
+
+print()
+print(f"Company:\t\tSales ($)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t${my_sales_dollars}\t\t{my_ms_dollars:.2f}%")
+print(f"Company B:\t\t??\t\t{competitor_ms_dollars:.2f}%")
+print(f"Lead Competitor:\t??\t\t{lead_ms_dollars:.2f}%")
+print(f"Market Size ($):\t??\t\t100%")
+print()
+
+# Company B Sales Dollars
+user_competitor_sales_dollars = int(input("Enter Company B's Total Sales to the nearest dollar: $"))
+
+if user_competitor_sales_dollars == competitor_sales_dollars:
+    print(f"Correct! The total sales of Company B was this year is ${competitor_sales_dollars}.")
+else:
+    print("Try again.")
+    user_competitor_sales_dollars = int(input("Enter Company B's Total Sales to the nearest dollar: $"))
+    if user_competitor_sales_dollars == competitor_sales_dollars:
+        print(f"Correct! The total sales of Company B was this year is ${competitor_sales_dollars}.")
+    else:
+        print("Try again. Last try.")
+        user_competitor_sales_dollars = int(input("Enter Company B's Total Sales to the nearest dollar: $"))
+        if user_competitor_sales_dollars == competitor_sales_dollars:
+            print(f"Correct! The total sales of Company B was this year is ${competitor_sales_dollars}.")
+        else:
+            print(f"The correct Company B's Sales in dollars was ${competitor_sales_dollars:.3f} (3 decimals for you to check your rounding).")
+            print("Divide Your Company's sales in dollars by the percent market share to figure out how many $ = 1% market share. ")
+            print("Multiply this number by the percent of Company B to find Company B's Sales in dollars.")
+            print(f"In this case, that will be {my_sales_dollars} / {my_ms_dollars} * {competitor_ms_dollars:.3f}.")
+
+print()
+print("Updated Version of the Question:")
+print()
+print(f"Company:\t\tSales ($)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t${my_sales_dollars}\t\t{my_ms_dollars:.2f}%")
+print(f"Company B:\t\t{competitor_sales_dollars}\t\t{competitor_ms_dollars:.2f}%")
+print(f"Lead Competitor:\t??\t\t{lead_ms_dollars:.2f}%")
+print(f"Market Size ($):\t??\t\t100%")
+print()
+
+# Lead Competitor Sales Dollars
+
+user_lead_sales_dollars = int(input("Enter the Lead Competitor's Total Sales to the nearest dollar: $"))
+
+if user_lead_sales_dollars == lead_sales_dollars:
+    print(f"Correct! The total sales of the Lead Competitor was this year is ${lead_sales_dollars}.")
+else:
+    print("Try again.")
+    user_lead_sales_dollars = int(input("Enter the Lead Competitor's Total Sales to the nearest dollar: $"))
+    if user_lead_sales_dollars == lead_sales_dollars:
+        print(f"Correct! The total sales of the Lead Competitor was this year is ${lead_sales_dollars}.")
+    else:
+        print("Try again. Last try.")
+        user_lead_sales_dollars = int(input("Enter the Lead Competitor's Total Sales to the nearest dollar: $"))
+        if user_lead_sales_dollars == lead_sales_dollars:
+            print(f"Correct! The total sales of the Lead Competitor was this year is ${lead_sales_dollars}.")
+        else:
+            print(f"The correct sales in dollars of the Lead Competitor was ${lead_sales_dollars} (3 decimals for you to check your rounding).")
+            print("Divide Your Company's sales in dollars by the percent market share to figure out how many $ = 1% market share. ")
+            print("Multiply this number by the percent of Company B to find Company B's Sales in dollars.")
+            print(f"In this case, that will be {my_sales_dollars} / {my_ms_dollars} * {lead_ms_dollars:}.")
+
+print()
+print("Updated Version of the Question:")
+print()
+print(f"Company:\t\tSales ($)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t${my_sales_dollars}\t\t{my_ms_dollars:.2f}%")
+print(f"Company B:\t\t{competitor_sales_dollars}\t\t{competitor_ms_dollars:.2f}%")
+print(f"Lead Competitor:\t{lead_sales_dollars}\t\t{lead_ms_dollars:.2f}%")
+print(f"Market Size ($):\t??\t\t100%")
+print()
+
+# Market Size
+
+user_total_sales = int(input("Input the market size: $"))
+
+if user_total_sales == total_sales_dollars:
+    print(f"Correct! The market size of the industry in dollars for this year is ${total_sales_dollars}.")
+else:
+    print("Try again.")
+    user_total_sales = float(input("$"))
+    if user_total_sales == total_sales_dollars:
+        print(f"Correct! The market size of the industry in dollars for this year is ${total_sales_dollars}.")
+    else:
+        print("Try again. Last try.")
+        user_total_sales = float(input("$"))
+        if user_total_sales == total_sales_dollars:
+            print(f"Correct! The market size of the industry in dollars for this year is ${total_sales_dollars}.")
+        else:
+            print(f"The correct market size was ${total_sales_dollars}.")
+            print(f"This is Your Company's sales {my_sales_dollars} + Company B's Sales {competitor_sales_dollars} + Lead Competitor's Sales {lead_sales_dollars}")
+
+print()
+print("Completed Version of the Question:")
+print()
+print(f"Company:\t\tSales ($)\tMarket Share %")
+print("_" * 50)
+print(f"Your Company:\t\t${my_sales_dollars}\t\t{my_ms_dollars:.2f}%")
+print(f"Company B:\t\t{competitor_sales_dollars}\t\t{competitor_ms_dollars:.2f}%")
+print(f"Lead Competitor:\t{lead_sales_dollars}\t\t{lead_ms_dollars:.2f}%")
+print(f"Market Size ($):\t{total_sales_dollars}\t\t100%")
+print()
+print("Good job!")
