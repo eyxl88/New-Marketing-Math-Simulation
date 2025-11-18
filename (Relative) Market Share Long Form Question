@@ -151,8 +151,10 @@ class LongQuestion:
     def __init__(self):
         self.count = 0
         self.question_type = "" # ASSIGN THIS OUTSIDE
-        # self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = "","","","","",
+        self.show_middle_top, self.show_middle_middle, self.show_middle_bottom, self.show_right_top, self.show_right_middle, \
+             self.show_right_bottom, self.show_market_size = False
         self.construction_list = [[my_company, competitor, lead_competition], [my_answers, competitor_answers, lead_answers]]
+        self.market_size = total.market_size
     def assign_answer_vals(self):
         if self.question_type == "units":
             value_list = [i.sales_units for i in self.construction_list[0]]
@@ -169,6 +171,11 @@ class LongQuestion:
         elif count > 0:
             print()
             print("Updated version of the question:")
+    def get_var(self, show_var, val):
+        if self.show_var == True:
+            return val
+        else:
+            return "??"
     def print_table_header(self):
         print()
         print(f"Company:\t\tSales ({self.question_type})\tMarket Share %")
@@ -176,11 +183,10 @@ class LongQuestion:
     def print_question(self): # Fix this up later
         self.print_question_header()
         self.print_table_header()
-        print(f"Your Company:\t\t{print_middle_top()}\t\t{my_answers.ms_units}")
-        print(f"Company B:\t\t{competitor.sales_units}\t\t??")
-        print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
-        print(f"Market Size (units):\t??\t\t100%")
-
+        print(f"Your Company:\t\t{self.get_var(self.show_middle_top, self.middle_top)}\t\t{self.get_var(show_right_top, self.right_top)}")
+        print(f"Company B:\t\t{self.get_var(self.show_middle_middle, self.middle_middle)}\t\t{self.get_var(self.show_right_middle, self.right_middle)}")
+        print(f"Lead Competitor:\t{self.get_var(self.show_middle_bottom, self.middle_bottom)}\t\t{self.get_var(self.show_right_bottom, self.right_bottom)}")
+        print(f"Market Size ({self.question_type}):\t{self.get_var(self.show_market_size, self.market_size}\t\t100%")
 # Set Up Answer Messages for Market Size Question
 market_size_units = AnswerMessages()
 market_size_units.correct = f"Correct. The market size in units is {market_size_units} units.\n"
@@ -189,15 +195,16 @@ market_size_units.wrong = f"The correct market size in units was {market_size_un
             f"In this case, that will be {my_company.sales_units} + {competitor.sales_units} * {lead_competition.sales_units}.\n"
 
 REVISIONS CURRENTLY HERE
+long_question.print_question()
 print()
-count = 0
-print_long_question(count)
 print("Assume only you, company B, and the lead competitor are in this industry.")
 completion = False
 while completion == False:
     user_market_size_units = get_user_input("Enter the total market size in units here: ", int)
     check_exact_value(user_market_size_units, total.market_size_units, market_size_units)
+long_question.count = 1
 
+long_question.print_question()
 print()
 print("Updated version of the question:")
 print()
