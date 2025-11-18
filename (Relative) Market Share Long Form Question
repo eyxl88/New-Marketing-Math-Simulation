@@ -158,6 +158,7 @@ class LongQuestion:
         if self.question_type == "units":
             value_list = i.sales_units for i in construction_list[0]
             value_list.extend(i.ms_units for i in construction_list[1])
+            self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
             
     def print_question_header(self):
         if count == 4:
