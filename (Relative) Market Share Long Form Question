@@ -183,10 +183,11 @@ class LongQuestion:
     def print_question(self): # Fix this up later
         self.print_question_header()
         self.print_table_header()
-        print(f"Your Company:\t\t{self.get_var(self.show_middle_top, self.middle_top)}\t\t{self.get_var(show_right_top, self.right_top)}")
-        print(f"Company B:\t\t{self.get_var(self.show_middle_middle, self.middle_middle)}\t\t{self.get_var(self.show_right_middle, self.right_middle)}")
-        print(f"Lead Competitor:\t{self.get_var(self.show_middle_bottom, self.middle_bottom)}\t\t{self.get_var(self.show_right_bottom, self.right_bottom)}")
-        print(f"Market Size ({self.question_type}):\t{self.get_var(self.show_market_size, self.market_size}\t\t100%")
+        print(f"Your Company:\t\t{self.get_var(self.show_middle_top, self.middle_top)}\t\t{self.get_var(show_right_top, self.right_top)}%")
+        print(f"Company B:\t\t{self.get_var(self.show_middle_middle, self.middle_middle)}\t\t{self.get_var(self.show_right_middle, self.right_middle)}%")
+        print(f"Lead Competitor:\t{self.get_var(self.show_middle_bottom, self.middle_bottom)}\t\t{self.get_var(self.show_right_bottom, self.right_bottom)}%")
+        print(f"Market Size ({self.question_type}):\t{self.get_var(self.show_market_size, self.market_size)}\t\t100%")
+
 # Set Up Answer Messages for Market Size Question
 market_size_units = AnswerMessages()
 market_size_units.correct = f"Correct. The market size in units is {market_size_units} units.\n"
@@ -194,50 +195,35 @@ market_size_units.wrong = f"The correct market size in units was {market_size_un
             f"Add Your Company's sales in units to Company B's sales in Units to the Lead Competitor's sales in units.\n" \
             f"In this case, that will be {my_company.sales_units} + {competitor.sales_units} * {lead_competition.sales_units}.\n"
 
-REVISIONS CURRENTLY HERE
+long_question = LongQuestion()
+self.question_type = "units"
 long_question.print_question()
+
 print()
 print("Assume only you, company B, and the lead competitor are in this industry.")
 completion = False
 while completion == False:
     user_market_size_units = get_user_input("Enter the total market size in units here: ", int)
-    check_exact_value(user_market_size_units, total.market_size_units, market_size_units)
+    check_exact_value(user_market_size_units, total.sales_units, market_size_units)
 long_question.count = 1
 
+long_question.show_market_size = True
 long_question.print_question()
-print()
-print("Updated version of the question:")
-print()
-print(f"Company:\t\tSales (units)\tMarket Share %")
-print("_" * 50)
-print(f"Your Company:\t\t{my_sales_units}\t\t??")
-print(f"Company B:\t\t{competitor_sales_units}\t\t??")
-print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
-print(f"Market Size (units):\t{market_size_units}\t\t100%")
 
-# Finding Your Market Share in Units
-print()
-user_my_ms_units = float(input("Enter YOUR company's market share in units as a percentage up to 2 decimal places: "))
+# Set up your comapny's market share answer messages.
+my_ms_units = AnswerMessages()
+my_ms_units.correct = f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference)."
+my_ms_units.wrong = f"The correct Market Share in units for Your Company was {my_answers.ms_units:.3f}% rounded up or down as necessary.\n" \
+              f"The Market Share of Your Company is your sales in units divided by total sales in units.\n" \
+              f"In this case, that is {my_company.sales_units} / {total.sales_units} * 100 to convert to a percent.\n"
 
-my_ms_units_low = my_ms_units - 0.005
-my_ms_units_high = my_ms_units + 0.005
+# Find your company's market share.
+completion = False
+while completion == False:
+    user_my_ms_units = get_user_input("Enter YOUR company's market share in units as a percentage up to 2 decimal places: ", float)
+    check_float_value(user_my_ms_units, my_answers.ms_units, my_ms_units)
 
-if my_ms_units_low < user_my_ms_units < my_ms_units_high:
-    print(f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_my_ms_units = float(input())
-    if my_ms_units_low < user_my_ms_units < my_ms_units_high:
-         print(f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_my_ms_units = float(input())
-         if my_ms_units_low < user_my_ms_units < my_ms_units_high:
-              print(f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference).")
-         else:
-              print(f"The correct Market Share in units for Your Company was {my_ms_units:.3f}% rounded up or down as necessary.")
-              print(f"The Market Share of Your Company is your sales in units divided by total sales in units.")
-              print(f"In this case, that is {my_sales_units} / {market_size_units} * 100 to convert to a percent.")
+long_question.show_right_
 
 print()
 print("Updated version of the question:")
