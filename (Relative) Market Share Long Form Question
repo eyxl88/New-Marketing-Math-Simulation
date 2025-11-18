@@ -150,16 +150,18 @@ def check_exact_value(user_val, value_to_check, instance_name):
 class LongQuestion:
     def __init__(self):
         self.count = 0
-        self.sales_type = ""
-        self.question_type = None # ASSIGN THIS OUTSIDE
+        self.question_type = "" # ASSIGN THIS OUTSIDE
         # self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = "","","","","",
-        construction_list = [[my_company, competitor, lead_competition], [my_answers, competitor_answers, lead_competition_answers]]
-    def __assign_answer_vals(self):
+        self.construction_list = [[my_company, competitor, lead_competition], [my_answers, competitor_answers, lead_answers]]
+    def assign_answer_vals(self):
         if self.question_type == "units":
-            value_list = i.sales_units for i in construction_list[0]
-            value_list.extend(i.ms_units for i in construction_list[1])
+            value_list = [i.sales_units for i in self.construction_list[0]]
+            value_list.extend([i.ms_units for i in self.construction_list[1]])
             self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
-            
+        if self.question_type == "dollars":
+            value_list = [i.sales_dollars for i in self.construction_list[0]]
+            value_list.extend([i.ms_dollars for i in self.construction_list[1]])
+            self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
     def print_question_header(self):
         if count == 4:
             print()
@@ -169,12 +171,12 @@ class LongQuestion:
             print("Updated version of the question:")
     def print_table_header(self):
         print()
-        print(f"Company:\t\t{sales_type}\tMarket Share %")
+        print(f"Company:\t\tSales ({self.question_type})\tMarket Share %")
         print("_" * 50)
     def print_question(self): # Fix this up later
         self.print_question_header()
         self.print_table_header()
-        print(f"Your Company:\t\t{my_company.sales_units}\t\t{my_answers.ms_units}")
+        print(f"Your Company:\t\t{print_middle_top()}\t\t{my_answers.ms_units}")
         print(f"Company B:\t\t{competitor.sales_units}\t\t??")
         print(f"Lead Competitor:\t{lead_competition_sales_units}\t\t??")
         print(f"Market Size (units):\t??\t\t100%")
