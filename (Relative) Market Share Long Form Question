@@ -30,7 +30,7 @@ class TotalInfo:
         self.sales_units = my_company.sales_units + lead_competition.sales_units + competitor.sales_units
         self.sales_dollars = my_company.sales_dollars + lead_competition.sales_dollars + competitor.sales_dollars
         self.last_year_sales = self.sales_dollars + change_in_sales
-        self.market_growth_rate = ((self.sales_dollars - last_year_sales) / last_year_sales) * 100
+        self.market_growth_rate = ((self.sales_dollars - self.last_year_sales) / self.last_year_sales) * 100
 
 total = TotalInfo()
 
@@ -135,7 +135,7 @@ def check_exact_value(user_val, value_to_check, instance_name):
     if user_val == "give up":
         instance_name.print_msg(3)
         completion = True
-    elif user_val == value_to_check
+    elif user_val == value_to_check:
         instance_name.print_msg(1)
         completion = True
     else:
@@ -148,32 +148,36 @@ class LongQuestion:
         self.count = 0
         self.question_type = "" # ASSIGN THIS OUTSIDE
         self.show_middle_top, self.show_middle_middle, self.show_middle_bottom, self.show_right_top, self.show_right_middle, \
-             self.show_right_bottom, self.show_market_size = False
+             self.show_right_bottom, self.show_market_size = False, False, False, False, False, False, False
+        self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = [None] * 6
         self.construction_list = [[my_company, competitor, lead_competition], [my_answers, competitor_answers, lead_answers]]
-        self.market_size = total.market_size
+        self.market_size = None
 
     def assign_answer_vals(self):
         if self.question_type == "units":
-            # This function does THIS
+            # This function does assigns the variables with units related items.
+            self.market_size = total.ms_units
             value_list = [i.sales_units for i in self.construction_list[0]]
             value_list.extend([i.ms_units for i in self.construction_list[1]])
             self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
         if self.question_type == "dollars":
+            # This  function assigns the problem values and answers with dollars related items.
+            self.market_size = total.ms_dollars
             value_list = [i.sales_dollars for i in self.construction_list[0]]
             value_list.extend([i.ms_dollars for i in self.construction_list[1]])
             self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
     
     def print_question_header(self):
-        if count == 4:
+        if self.count == 4:
             print()
             print("Completed version of the question:")
-        elif count > 0:
+        elif self.count > 0:
             print()
             print("Updated version of the question:")
 
     def get_var(self, show_var, val):
-        if self.show_var == True:
-            if val.is_instance(float):
+        if show_var == True:
+            if isinstance(val, float):
                 return f"val:.2f" # Rounds dollar values / percentages before presentation.
             else:
                 return val # Returns whole numbers as they are.
@@ -188,7 +192,7 @@ class LongQuestion:
     def print_question(self): # Fix this up later
         self.print_question_header()
         self.print_table_header()
-        print(f"Your Company:\t\t{self.get_var(self.show_middle_top, self.middle_top)}\t\t{self.get_var(show_right_top, self.right_top)}%")
+        print(f"Your Company:\t\t{self.get_var(self.show_middle_top, self.middle_top)}\t\t{self.get_var(self.show_right_top, self.right_top)}%")
         print(f"Company B:\t\t{self.get_var(self.show_middle_middle, self.middle_middle)}\t\t{self.get_var(self.show_right_middle, self.right_middle)}%")
         print(f"Lead Competitor:\t{self.get_var(self.show_middle_bottom, self.middle_bottom)}\t\t{self.get_var(self.show_right_bottom, self.right_bottom)}%")
         print(f"Market Size ({self.question_type}):\t{self.get_var(self.show_market_size, self.market_size)}\t\t100%")
@@ -246,7 +250,7 @@ competitor_ms_units.wrong = f"The correct Market Share in units for Company B wa
 # Company B Market Share Question
 print()
 completion = False
-while completion = False:
+while completion == False:
         user_competitor_ms_units = get_user_input("Enter Company B's market share in units as a percentage up to 2 decimal places: ", float)
         check_float_value(user_competitor_ms_units, competitor_answers.ms_units, competitor_ms_units)
 
@@ -265,7 +269,7 @@ lead_ms_units.wrong = f"The correct Market Share in units for the Lead Competito
 # Lead Competitor Market Share Question
 print()
 completion = False
-while completion = False:
+while completion == False:
     user_lead_ms_units = float(input("Enter the Lead Competitor's market share in units as a percentage up to 2 decimal places: "))
     check_float_value(user_lead_ms_units, lead_answers.ms_units, lead_ms_units)
 
@@ -334,5 +338,5 @@ while completion == False:
     check_exact_value(user_total_sales, total.sales_dollars, total_sales)
 long_question2.count += 1
 long_question2.show_market_size = True
-long_qestion2.print_question()
+long_question2.print_question()
 print("Good job! All done with Market Share Long Answer Questions!")
