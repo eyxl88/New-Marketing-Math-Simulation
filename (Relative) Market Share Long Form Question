@@ -53,13 +53,6 @@ my_answers = ProblemAnswers(my_company)
 competitor_answers = ProblemAnswers(competitor)
 lead_answers = ProblemAnswers(lead_competition)
 
-# Relative Market Share # Didn't change because I'm just cleaning up back end code.
-print(f"Company:\t\tSales in dollars ($)")
-print("_" * 50)
-print(f"You:\t\t\t${my_company.sales_dollars:,d}")
-print(f"Company B:\t\t${competitor.sales_dollars:,d}")
-print(f"Lead Competitor:\t${lead_competition.sales_dollars:,d}")
-
 # Create appropriate exception classes for common input errors.
 class CommaError(Exception):
     def __init__(self, value):
@@ -180,7 +173,10 @@ class LongQuestion:
 
     def get_var(self, show_var, val):
         if self.show_var == True:
-            return f"val:.2f"
+            if val.is_instance(float):
+                return f"val:.2f" # Rounds dollar values / percentages before presentation.
+            else:
+                return val # Returns whole numbers as they are.
         else:
             return "??"
 
@@ -271,7 +267,7 @@ print()
 completion = False
 while completion = False:
     user_lead_ms_units = float(input("Enter the Lead Competitor's market share in units as a percentage up to 2 decimal places: "))
-    check_float_value(user_lead_ms_units, lead_competition_answers.ms_units, lead_ms_units)
+    check_float_value(user_lead_ms_units, lead_answers.ms_units, lead_ms_units)
 
 # Complete Long Question Printing.
 long_question.count += 1
@@ -337,6 +333,6 @@ while completion == False:
     user_total_sales = get_user_input("Input the market size: $", int)
     check_exact_value(user_total_sales, total.sales_dollars, total_sales)
 long_question2.count += 1
-long_question2.show_# FIND ME WHAT DO I SHOW??????
+long_question2.show_market_size = True
 long_qestion2.print_question()
 print("Good job! All done with Market Share Long Answer Questions!")
