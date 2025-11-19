@@ -1,3 +1,4 @@
+
 print(f"Welcome to Long Answer Market Share and Market Size\n")
 
 global completion
@@ -299,6 +300,7 @@ while completion == False:
     user_competitor_sales_dollars = get_user_input("Enter Company B's Total Sales to the nearest dollar: $", int)
     check_exact_value(user_competitor_sales_dollars, competitor.sales_dollars, competitor_sales_dollars)
 
+# Update the question class, show values, print.
 long_question2.count += 1
 long_question2.show_right_middle = True
 long_question2.print_question
@@ -317,39 +319,24 @@ while completion == False:
     user_lead_sales_dollars = int(input("Enter the Lead Competitor's Total Sales to the nearest dollar: $"))
     check_exact_value(user_lead_sales_dollars, lead_competition.sales_dollars, lead_competition_sales_dollars)
 
+# Update the question class, counter.
 long_question2.count += 1
 long_question2.show_bottom_right = True
 long_question2.print_question()
 
-REVISIONS UP UNTIL THIS LINE HERE_______________________________________________________
-# Market Size
 
-user_total_sales = int(input("Input the market size: $"))
+# Market Size Answer Messages set Up
+total_sales = AnswerMessages()
+total_sales.correct = f"Correct! The market size of the industry in dollars for this year is ${total.sales_dollars}."
+total_sales.wrong = f"The correct market size was ${total.sales_dollars}.\n" \
+            f"This is Your Company's sales {my_company.sales_dollars} + Company B's Sales {competitor.sales_dollars} + Lead Competitor's Sales {lead_competition.sales_dollars}"
 
-if user_total_sales == total_sales_dollars:
-    print(f"Correct! The market size of the industry in dollars for this year is ${total_sales_dollars}.")
-else:
-    print("Try again.")
-    user_total_sales = float(input("$"))
-    if user_total_sales == total_sales_dollars:
-        print(f"Correct! The market size of the industry in dollars for this year is ${total_sales_dollars}.")
-    else:
-        print("Try again. Last try.")
-        user_total_sales = float(input("$"))
-        if user_total_sales == total_sales_dollars:
-            print(f"Correct! The market size of the industry in dollars for this year is ${total_sales_dollars}.")
-        else:
-            print(f"The correct market size was ${total_sales_dollars}.")
-            print(f"This is Your Company's sales {my_sales_dollars} + Company B's Sales {competitor_sales_dollars} + Lead Competitor's Sales {lead_sales_dollars}")
-
-print()
-print("Completed Version of the Question:")
-print()
-print(f"Company:\t\tSales ($)\tMarket Share %")
-print("_" * 50)
-print(f"Your Company:\t\t${my_sales_dollars}\t\t{my_ms_dollars:.2f}%")
-print(f"Company B:\t\t{competitor_sales_dollars}\t\t{competitor_ms_dollars:.2f}%")
-print(f"Lead Competitor:\t{lead_sales_dollars}\t\t{lead_ms_dollars:.2f}%")
-print(f"Market Size ($):\t{total_sales_dollars}\t\t100%")
-print()
-print("Good job!")
+# Market Size Question Final
+completion = False
+while completion == False:
+    user_total_sales = get_user_input("Input the market size: $", int)
+    check_exact_value(user_total_sales, total.sales_dollars, total_sales)
+long_question2.count += 1
+long_question2.show_# FIND ME WHAT DO I SHOW??????
+long_qestion2.print_question()
+print("Good job! All done with Market Share Long Answer Questions!")
