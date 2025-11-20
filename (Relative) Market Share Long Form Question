@@ -190,7 +190,8 @@ class LongQuestion:
         print(f"Company:\t\tSales ({self.question_type})\tMarket Share %")
         print("_" * 50)
 
-    def print_question(self): # Fix this up later
+    def print_question(self):
+        self.assign_answer_vals()
         self.print_question_header()
         self.print_table_header()
         print(f"Your Company:\t\t{self.get_var(self.show_middle_top, self.middle_top)}\t\t{self.get_var(self.show_right_top, self.right_top)}%")
