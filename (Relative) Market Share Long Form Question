@@ -286,8 +286,8 @@ print()
 # Dollars Problem Setup
 long_question2 = LongQuestion()
 long_question2.question_type = "dollars"
-long_question2.show_middle_top, long_question2.show_right_top = True
-long_question2.show_right_middle, long_question2.show_right_bottom = True
+long_question2.show_middle_top, long_question2.show_right_top = True, True
+long_question2.show_right_middle, long_question2.show_right_bottom = True, True
 long_question2.print_question()
 
 # Company B Sales Dollars Setting Up Answer Messages
