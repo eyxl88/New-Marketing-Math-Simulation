@@ -105,7 +105,7 @@ class AnswerMessages:
     def __init__(self):
         self.correct = None
         self.input_precursor = ""
-        self.try_again = "Try again or enter \"give up\" to show the answer: {self.input_precursor}"
+        self.try_again = f"\nTry again or enter \"give up\" to show the answer: {self.input_precursor}"
         self.wrong = None
     def print_msg(self, msg):
         if msg == 1:
@@ -132,6 +132,7 @@ def check_float_value(user_val, value_to_check, instance_name):
         instance_name.print_msg(2)
 
 def check_exact_value(user_val, value_to_check, instance_name):
+    global completion
     if user_val == "give up":
         instance_name.print_msg(3)
         completion = True
@@ -230,6 +231,7 @@ my_ms_units.wrong = f"The correct Market Share in units for Your Company was {my
               f"In this case, that is {my_company.sales_units} / {total.sales_units} * 100 to convert to a percent.\n"
 
 # Find your company's market share.
+print()
 completion = False
 while completion == False:
     user_my_ms_units = get_user_input("Enter YOUR company's market share in units as a percentage up to 2 decimal places: ", float)
@@ -270,7 +272,7 @@ lead_ms_units.wrong = f"The correct Market Share in units for the Lead Competito
 print()
 completion = False
 while completion == False:
-    user_lead_ms_units = float(input("Enter the Lead Competitor's market share in units as a percentage up to 2 decimal places: "))
+    user_lead_ms_units = get_user_input("Enter the Lead Competitor's market share in units as a percentage up to 2 decimal places: ", float)
     check_float_value(user_lead_ms_units, lead_answers.ms_units, lead_ms_units)
 
 # Complete Long Question Printing.
@@ -278,16 +280,18 @@ long_question.count += 1
 long_question.show_right_bottom = True
 long_question.print_question()
 print("Good job! Now, on to the dollars Market Share Simulation!")
+print()
 
 # Dollars Problem Setup
 long_question2 = LongQuestion()
-long_question2.question_type = "units"
+long_question2.question_type = "dollars"
 long_question2.show_middle_top, long_question2.show_right_top = True
 long_question2.show_right_middle, long_question2.show_right_bottom = True
 long_question2.print_question()
 
 # Company B Sales Dollars Setting Up Answer Messages
 competitor_sales_dollars = AnswerMessages()
+competitor_sales_dollars.precursor = "$"
 competitor_sales_dollars.correct = f"Correct! The total sales of Company B was this year is ${competitor.sales_dollars}."
 competitor_sales_dollars.wrong = f"The total sales of Company B this year was ${competitor.sales_dollars}.\n" \
         f"Divide Your Company's sales in dollars by the percent market share to figure out how many $ = 1% market share.\n" \
@@ -295,6 +299,7 @@ competitor_sales_dollars.wrong = f"The total sales of Company B this year was ${
         f"In this case, that will be {my_company.sales_dollars} / {my_answers.ms_dollars:.2f} * {competitor_answers.ms_dollars:.2f}."
 
 # Company B Sales Dollars Question
+print()
 completion = False
 while completion == False:
     user_competitor_sales_dollars = get_user_input("Enter Company B's Total Sales to the nearest dollar: $", int)
@@ -307,6 +312,7 @@ long_question2.print_question
 
 # Set up Lead Competitor Sales Dollars Answers
 lead_competition_sales_dollars = AnswerMessages()
+lead_competition_sales_dollars.precursor = "$"
 lead_competition_sales_dollars.correct = f"Correct! The total sales of the Lead Competitor was this year is ${lead_competitor.sales_dollars}."
 lead_competition_sales_dollars.wrong = f"The correct sales in dollars of the Lead Competitor was ${lead_competitor.sales_dollars:.2f}\n." \
             f"Divide Your Company's sales in dollars by the percent market share to figure out how many $ = 1% market share.\n" \
@@ -314,6 +320,7 @@ lead_competition_sales_dollars.wrong = f"The correct sales in dollars of the Lea
             f"In this case, that will be {my_company.sales_dollars} / {my_answers.ms_dollars} * {lead_answers.ms_dollars:}."
 
 # Lead Competitor Sales Dollars Question
+print()
 completion = False
 while completion == False:
     user_lead_sales_dollars = int(input("Enter the Lead Competitor's Total Sales to the nearest dollar: $"))
@@ -324,18 +331,21 @@ long_question2.count += 1
 long_question2.show_bottom_right = True
 long_question2.print_question()
 
-
 # Market Size Answer Messages set Up
 total_sales = AnswerMessages()
+total_sales.precursor = "$"
 total_sales.correct = f"Correct! The market size of the industry in dollars for this year is ${total.sales_dollars}."
 total_sales.wrong = f"The correct market size was ${total.sales_dollars}.\n" \
             f"This is Your Company's sales {my_company.sales_dollars} + Company B's Sales {competitor.sales_dollars} + Lead Competitor's Sales {lead_competition.sales_dollars}"
 
 # Market Size Question Final
+print()
 completion = False
 while completion == False:
     user_total_sales = get_user_input("Input the market size: $", int)
     check_exact_value(user_total_sales, total.sales_dollars, total_sales)
+
+# Update longquestion and print.
 long_question2.count += 1
 long_question2.show_market_size = True
 long_question2.print_question()
