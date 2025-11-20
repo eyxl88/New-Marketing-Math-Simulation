@@ -178,7 +178,7 @@ class LongQuestion:
     def get_var(self, show_var, val):
         if show_var == True:
             if isinstance(val, float):
-                return f"val:.2f" # Rounds dollar values / percentages before presentation.
+                return f"{val:.2f}" # Rounds dollar values / percentages before presentation.
             else:
                 return val # Returns whole numbers as they are.
         else:
@@ -199,8 +199,8 @@ class LongQuestion:
 
 # Set Up Answer Messages for Market Size Question
 market_size_units = AnswerMessages()
-market_size_units.correct = f"Correct. The market size in units is {market_size_units} units."
-market_size_units.wrong = f"The correct market size in units was {market_size_units} units.\n" \
+market_size_units.correct = f"Correct. The market size in units is {total.sales_units} units."
+market_size_units.wrong = f"The correct market size in units was {total.sales_units} units.\n" \
             f"Add Your Company's sales in units to Company B's sales in Units to the Lead Competitor's sales in units.\n" \
             f"In this case, that will be {my_company.sales_units} + {competitor.sales_units} * {lead_competition.sales_units}.\n"
 
@@ -224,7 +224,7 @@ long_question.print_question()
 
 # Set up your comapny's market share answer messages.
 my_ms_units = AnswerMessages()
-my_ms_units.correct = f"Correct! Your Company's Market Share is {my_ms_units:.3f}% (3 decimal places for reference)."
+my_ms_units.correct = f"Correct! Your Company's Market Share is {my_answers.ms_units:.3f}% (3 decimal places for reference)."
 my_ms_units.wrong = f"The correct Market Share in units for Your Company was {my_answers.ms_units:.3f}% rounded up or down as necessary.\n" \
               f"The Market Share of Your Company is your sales in units divided by total sales in units.\n" \
               f"In this case, that is {my_company.sales_units} / {total.sales_units} * 100 to convert to a percent.\n"
