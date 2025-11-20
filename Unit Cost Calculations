@@ -1,0 +1,37 @@
+# Unit Cost Calculations
+
+import random
+
+unit_vc = float(str(random.randint(2, 100)) + "." + str(random.randint(10,99)))
+expected_sales = random.randint(100, 1000)
+unit_fc = float(str(random.randint(1, 15)) + "." + str(random.randint(10,99)))
+total_fc = round(unit_fc * expected_sales, 2)
+
+print("Values to be used in the problem:")
+print(f"Unit VC: ${unit_vc}\nTotal FC: ${total_fc}")
+print(f"Expected Sales: {expected_sales} units")
+
+unit_cost = unit_vc + total_fc / expected_sales
+
+user_unit_cost = float(input("What is the unit cost to produce one unit of the product? $"))
+
+unit_cost_low = unit_cost - 0.005
+unit_cost_high = unit_cost + 0.005
+
+if unit_cost_low < user_unit_cost < unit_cost_high:
+    print(f"Correct! The unit cost is ${unit_cost:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_unit_cost = float(input())
+    if unit_cost_low < user_unit_cost < unit_cost_high:
+         print(f"Correct! The unit cost is ${unit_cost:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_unit_cost = float(input())
+         if unit_cost_low < user_unit_cost < unit_cost_high:
+              print(f"Correct! The unit cost is ${unit_cost:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct unit cost was ${unit_cost:.3f} rounded up or down as necessary.")
+              print(f"Unit Cost is unit variable cost (Unit VC) + Unit Fixed Costs (Unit FC).")
+              print(f"Unit FC is found by taking Total FC / Number of Units")
+              print(f"This means ${unit_vc} - (${total_fc} / {expected_sales}) = ${unit_cost:.3f} in this case.")
