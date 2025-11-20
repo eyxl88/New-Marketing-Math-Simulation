@@ -156,13 +156,13 @@ class LongQuestion:
     def assign_answer_vals(self):
         if self.question_type == "units":
             # This function does assigns the variables with units related items.
-            self.market_size = total.ms_units
+            self.market_size = total.sales_units
             value_list = [i.sales_units for i in self.construction_list[0]]
             value_list.extend([i.ms_units for i in self.construction_list[1]])
             self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
         if self.question_type == "dollars":
             # This  function assigns the problem values and answers with dollars related items.
-            self.market_size = total.ms_dollars
+            self.market_size = total.sales_dollars
             value_list = [i.sales_dollars for i in self.construction_list[0]]
             value_list.extend([i.ms_dollars for i in self.construction_list[1]])
             self.middle_top, self.middle_middle, self.middle_bottom, self.right_top, self.right_middle, self.right_bottom = tuple(value_list)
@@ -199,7 +199,7 @@ class LongQuestion:
 
 # Set Up Answer Messages for Market Size Question
 market_size_units = AnswerMessages()
-market_size_units.correct = f"Correct. The market size in units is {market_size_units} units.\n"
+market_size_units.correct = f"Correct. The market size in units is {market_size_units} units."
 market_size_units.wrong = f"The correct market size in units was {market_size_units} units.\n" \
             f"Add Your Company's sales in units to Company B's sales in Units to the Lead Competitor's sales in units.\n" \
             f"In this case, that will be {my_company.sales_units} + {competitor.sales_units} * {lead_competition.sales_units}.\n"
@@ -245,7 +245,7 @@ competitor_ms_units = AnswerMessages()
 competitor_ms_units.correct = f"Correct! Company B's Market Share is {competitor_answers.ms_units:.2f}%."
 competitor_ms_units.wrong = f"The correct Market Share in units for Company B was {competitor_answers.ms_units:.2f}%.\n" \
               f"The Market Share of Company B is Company B's sales in units divided by total sales in units.\n" \
-              f"In this case, that is {competitor.sales_units} / {total.ms_units} * 100 to convert to a percent."
+              f"In this case, that is {competitor.sales_units} / {total.sales_units} * 100 to convert to a percent."
 
 # Company B Market Share Question
 print()
@@ -264,7 +264,7 @@ lead_ms_units = AnswerMessages()
 lead_ms_units.correct = f"Correct! The Lead Competitor's Market Share is {lead_answers.ms_units:.2f}%"
 lead_ms_units.wrong = f"The correct Market Share in units for the Lead Competitor was {lead_answers.ms_units:.2f}%\n" \
               f"The Market Share of the Lead Competitor is the Lead Competitor's sales in units divided by total sales in units.\n" \
-              f"In this case, that is {lead_competition.sales_units} / {total.ms_units} * 100 to convert to a percent."
+              f"In this case, that is {lead_competition.sales_units} / {total.sales_units} * 100 to convert to a percent."
 
 # Lead Competitor Market Share Question
 print()
