@@ -1,10 +1,8 @@
-# Unit Cost Calculations
-
 import random
 
-unit_vc = float(str(random.randint(2, 100)) + "." + str(random.randint(10,99)))
+unit_vc = random.uniform(2, 100)
 expected_sales = random.randint(100, 1000)
-unit_fc = float(str(random.randint(1, 15)) + "." + str(random.randint(10,99)))
+unit_fc = random.uniform(1, 15)
 total_fc = round(unit_fc * expected_sales, 2)
 
 print("Values to be used in the problem:")
