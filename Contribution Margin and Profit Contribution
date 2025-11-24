@@ -1,0 +1,140 @@
+print("Welcome to Contribution Margin and Profit Contribution Practice")
+
+import random
+
+unit_vc = float(str(random.randint(2, 100)) + "." + str(random.randint(10,99)))
+unit_profit = float(str(random.randint(1, 15)) + "." + str(random.randint(10,99)))
+expected_sales = random.randint(100, 1000)
+unit_fc = float(str(random.randint(1, 15)) + "." + str(random.randint(10,99)))
+total_fc = round(unit_fc * expected_sales, 2)
+selling_price = round(unit_vc + unit_fc + unit_profit, 2)
+
+print("Values to be used in the problem:")
+print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
+print(f"Unit Selling Price: ${selling_price}\nExpected Sales: {expected_sales} units")
+
+# Calculates the actual values
+unit_cm = selling_price - unit_vc
+percent_cm = ((unit_cm) / selling_price) * 100
+profit_contribution = (unit_cm - unit_fc)
+total_cm = unit_cm * expected_sales
+total_pc = profit_contribution * expected_sales
+
+# Unit Contributed Margin
+print()
+user_unit_cm = float(input("Enter the CM per unit in $ as a decimal up to 2 places: $"))
+
+unit_cm_low = unit_cm - 0.005
+unit_cm_high = unit_cm + 0.005
+
+if unit_cm_low < user_unit_cm < unit_cm_high:
+    print(f"Correct! The CM per unit is ${unit_cm:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_unit_cm = float(input())
+    if unit_cm_low < user_unit_cm < unit_cm_high:
+        print(f"Correct! The CM per unit is ${unit_cm:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_unit_cm = float(input())
+         if unit_cm_low < user_unit_cm < unit_cm_high:
+               print(f"Correct! The CM per unit is ${unit_cm:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct CM per unit was ${unit_cm:.3f} rounded up or down as necessary.")
+              print(f"Contributed margin is unit selling price - unit variable costs.")
+              print(f"This means ${selling_price} - ${unit_vc} = ${unit_cm:.3f} in this case.")
+
+#Percent Contributed Margin
+print()
+user_percent_cm = float(input("Enter the CM as a percent (DO NOT ENTER % THOUGH) up to 2 decimal places: "))
+
+percent_cm_low = percent_cm - 0.005
+percent_cm_high = percent_cm + 0.005
+
+if percent_cm_low < user_percent_cm < percent_cm_high:
+    print(f"Correct! The percent CM is {percent_cm:.3f}% (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_percent_cm = float(input())
+    if (percent_cm - 0.006) < user_percent_cm < (percent_cm + 0.006):
+        print(f"Correct! The percent CM is {percent_cm:.3f}% (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_percent_cm = float(input())
+         if (percent_cm - 0.006) < user_percent_cm < (percent_cm + 0.006):
+              print(f"Correct! The percent CM is {percent_cm:.3f}% with less rounding for reference.")
+         else:
+              print(f"The correct percent CM was {percent_cm:.3f}% rounded up or down as necessary.")
+
+# Profit Contribution
+print()
+user_profit_contribution = float(input("Enter the PC per unit as a decimal up to 2 places: $"))
+
+profit_contribution_low = profit_contribution - 0.005
+profit_contribution_high = profit_contribution + 0.005
+
+if profit_contribution_low < user_profit_contribution < profit_contribution_high:
+    print(f"Correct! The profit contribution is ${profit_contribution:.3f} (3 decimal digits as a reference).")
+else:
+    print("Try again.")
+    user_profit_contribution = float(input())
+    if profit_contribution_low < user_profit_contribution < profit_contribution_high:
+            print(f"Correct! The profit contribution is ${profit_contribution:.3f} (3 decimal digits as a reference).")
+    else:
+         print("Try again. Last try.")
+         user_profit_contribution = float(input())
+         if profit_contribution_low < user_profit_contribution < profit_contribution_high:
+              print(f"Correct! The profit contribution is ${profit_contribution:.3f} (3 decimal digits as a reference).")
+         else:
+              print(f"The correct profit contribution was ${profit_contribution:.3f} rounded up or down as necessary.")
+              print(f"Profit contribution is (unit selling price - unit variable costs - fixed costs per unit.")
+              print("Fixed costs per unit are total fixed costs / expected number of units sold.")
+              print(f"This means {selling_price} - {unit_vc} - {unit_fc} in this case.")
+
+# Total Contributed Margin
+print()
+user_total_cm = float(input("Enter the total CM as a decimal up to 2 places: $"))
+
+total_cm_low = total_cm - 0.005
+total_cm_high = total_cm + 0.005
+
+if total_cm_low < user_total_cm < total_cm_high:
+    print(f"Correct! The total CM is ${total_cm:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_total_cm = float(input())
+    if total_cm_low < user_total_cm < total_cm_high:
+         print(f"Correct! The total CM is ${total_cm:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_total_cm = float(input())
+         if total_cm_low < user_total_cm < total_cm_high:
+              print(f"Correct! The total CM is ${total_cm:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct total CM was ${total_cm:.3f} rounded up or down as necessary.")
+              print(f"Total contributed margin is unit ontributed margin * expected sales in this case.")
+              print(f"This means ${unit_cm} * {expected_sales} in this case.")
+
+# Total Profit Contribution
+print()
+user_total_pc = float(input("Enter the total PC as a decimal up to 2 places: $"))
+
+total_pc_low = total_pc - 0.005
+total_pc_high = total_pc + 0.005
+
+if total_pc_low < user_total_pc < total_pc_high:
+    print(f"Correct! The total PC is ${total_pc:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_total_pc = float(input())
+    if total_pc_low < user_total_pc < total_pc_high:
+         print(f"Correct! The total PC is ${total_pc:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_total_pc = float(input())
+         if total_pc_low < user_total_pc < total_pc_high:
+              print(f"Correct! The total PC is ${total_pc:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct total PR was ${total_pc:.3f} rounded up or down as necessary.")
+              print(f"Total contributed margin is unit ontributed margin * expected sales in this case.")
+              print(f"This means ${unit_pc} * {expected_sales} in this case.")
