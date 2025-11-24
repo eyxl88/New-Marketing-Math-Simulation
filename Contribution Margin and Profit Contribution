@@ -2,12 +2,26 @@ print("Welcome to Contribution Margin and Profit Contribution Practice")
 
 import random
 
-unit_vc = float(str(random.randint(2, 100)) + "." + str(random.randint(10,99)))
-unit_profit = float(str(random.randint(1, 15)) + "." + str(random.randint(10,99)))
-expected_sales = random.randint(100, 1000)
-unit_fc = float(str(random.randint(1, 15)) + "." + str(random.randint(10,99)))
-total_fc = round(unit_fc * expected_sales, 2)
-selling_price = round(unit_vc + unit_fc + unit_profit, 2)
+# Initialize class Unit to generate and store the unit-related variables of the problem.
+class Unit:
+    def __init__(self):
+        self.vc = round(random.uniform(2, 100), 2)
+        self.profit = round(random.uniform(1, 15), 2)
+        self.fc = round(random.uniform(1, 15), 2)
+        self.selling_price = unit_vc + unit_fc + unit_profit
+        self.dollar_cm = self.selling_price - self.vc
+        self.percent_cm = self.dollar_cm / self.selling_price * 100
+        self.dollar_pc = self.cm - self.fc
+
+# Initialize class Total to store the Total related variables in the problem.
+class Total:
+    def __init__(self):
+        self.expected_sales = random.randint(100, 1000)
+        self.cm = unit.cm * self.expected_sales
+        self.pc = unit.pc * self.expected_sales
+
+
+
 
 print("Values to be used in the problem:")
 print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
