@@ -110,70 +110,48 @@ print("Values to be used in the problem:")
 print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
 print(f"Unit Selling Price: ${selling_price}\nExpected Sales: {expected_sales} units")
 
+# Unit CM Problem Setup
 unit_cm = AnswerMessages()
-unit_cm.correct = f"Correct! The CM per unit is ${unit_cm:.2f}."\
-unit_cm.wrong = f"The correct CM per unit was ${unit_cm:.3f} rounded up or down as necessary.\n" \
+unit_cm.correct = f"Correct! The CM per unit is ${unit.dollars_cm:.2f}."\
+unit_cm.wrong = f"The correct CM per unit was ${unit.dollars_cm:.2f}.\n" \
               f"Contributed margin is unit selling price - unit variable costs.\n" \
-              f"This means ${selling_price} - ${unit_vc} = ${unit_cm:.3f} in this case.\n" \
+              f"This means ${unit.selling_price} - ${unit.vc} = ${unit.dollars_cm:.3f} in this case.\n" \
+unit_cm.precursor = "$"
 
 completion = False
 while completion == False:
     user_unit_cm = get_user_input("Enter the CM per unit in $ as a decimal up to 2 places: $", float)
-    check_float_value(user_unit_cm)
+    check_float_value(user_unit_cm, unit.dollars_cm, unit_cm)
 
-#Percent Contributed Margin
+# Percent Contribution Margin Problem Set up and Answers
 print()
 
 percent_cm = AnswerMessages()
-percent_cm.correct = # FINISH ME
+percent_cm.correct = f"Correct! The percent CM is {unit.percent_cm:.2f}%."
+percent_cm.wrong = f"The correct percent CM was {unit.percent_cm:.2f}%.\n" \
+            f"Percent CM is contribution margin divided by selling price (multiplied by 100 to make a percent).\n" \
+            f"In this case, this is {unit.dollars_cm} / {unit.selling_price} * 100."
 
 completion = False
 while completion == False:
     user_percent_cm = get_user_input("Enter the CM as a percent (DO NOT ENTER % THOUGH) up to 2 decimal places: ", float)
-    check_user_input(user_percent_cm, unit.percent_cm, percent_cm)
+    check_float_value(user_percent_cm, unit.percent_cm, percent_cm)
 
-percent_cm_low = percent_cm - 0.005
-percent_cm_high = percent_cm + 0.005
-
-if percent_cm_low < user_percent_cm < percent_cm_high:
-    print(f"Correct! The percent CM is {percent_cm:.3f}% (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_percent_cm = float(input())
-    if (percent_cm - 0.006) < user_percent_cm < (percent_cm + 0.006):
-        print(f"Correct! The percent CM is {percent_cm:.3f}% (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_percent_cm = float(input())
-         if (percent_cm - 0.006) < user_percent_cm < (percent_cm + 0.006):
-              print(f"Correct! The percent CM is {percent_cm:.3f}% with less rounding for reference.")
-         else:
-              print(f"The correct percent CM was {percent_cm:.3f}% rounded up or down as necessary.")
-
-# Profit Contribution
+# Profit Contribution Problem Set
 print()
-user_profit_contribution = float(input("Enter the PC per unit as a decimal up to 2 places: $"))
 
-profit_contribution_low = profit_contribution - 0.005
-profit_contribution_high = profit_contribution + 0.005
+profit_contribution = AnswerMessages()
+profit_contribution.correct = f"Correct! The profit contribution is ${profit_contribution:.2f}."
+profit_contribution.wrong = f"The correct profit contribution was ${profit_contribution:.2f}.\n" \              
+            f"Profit contribution is (unit selling price - unit variable costs - fixed costs per unit.\n" \
+            f"Fixed costs per unit are total fixed costs / expected number of units sold.\n" \
+            f"This means {selling_price} - {unit_vc} - {unit_fc} in this case."
+profit_contribution.precursor = "$"
 
-if profit_contribution_low < user_profit_contribution < profit_contribution_high:
-    print(f"Correct! The profit contribution is ${profit_contribution:.3f} (3 decimal digits as a reference).")
-else:
-    print("Try again.")
-    user_profit_contribution = float(input())
-    if profit_contribution_low < user_profit_contribution < profit_contribution_high:
-            print(f"Correct! The profit contribution is ${profit_contribution:.3f} (3 decimal digits as a reference).")
-    else:
-         print("Try again. Last try.")
-         user_profit_contribution = float(input())
-         if profit_contribution_low < user_profit_contribution < profit_contribution_high:
-              print(f"Correct! The profit contribution is ${profit_contribution:.3f} (3 decimal digits as a reference).")
-         else:
-              print(f"The correct profit contribution was ${profit_contribution:.3f} rounded up or down as necessary.")
-              print(f"Profit contribution is (unit selling price - unit variable costs - fixed costs per unit.")
-              print("Fixed costs per unit are total fixed costs / expected number of units sold.")
-              print(f"This means {selling_price} - {unit_vc} - {unit_fc} in this case.")
+completion = False
+while completion == False:
+    user_profit_contribution = check_user_input("Enter the PC per unit as a decimal up to 2 places: $", float)
+    check_float_value(user_profit_contribution, unit.dollars_pc, profit_contribution)
 
 # Total Contributed Margin
 print()
