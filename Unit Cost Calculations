@@ -1,35 +1,107 @@
 import random
 
+# Set problem values.
 unit_vc = random.uniform(2, 100)
 expected_sales = random.randint(100, 1000)
 unit_fc = random.uniform(1, 15)
 total_fc = round(unit_fc * expected_sales, 2)
+unit_cost = unit_vc + total_fc / expected_sales
+
+# Create appropriate exception classes for common input errors.
+class CommaError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+class DollarSignError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+class PercentError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+# General function to safely handle user input so the program does not break so easily.
+def get_user_input(print_message, float_or_int):
+    print(print_message, end="")
+    user_input = input()
+    while user_input != "give up":
+        try:
+            if "," in user_input:
+                raise CommaError("Invalid input. Do not enter the , sign")
+            if "%" in user_input:
+                raise PercentError("Invalid input. Do not enter the % sign.")
+            if "$" in user_input:
+                raise DollarSignError("Invalid Input. Do not enter the $ sign.")
+            user_input = float_or_int(user_input)
+            return user_input
+            break
+
+        except CommaError as excpt:
+              print(excpt)
+              user_input = input()
+        except PercentError as excpt:
+              print(excpt)
+              user_input = input()
+        except DollarSignError as excpt:
+              print(excpt)
+              user_input = input()
+        except:
+              print("Invalid Entry.")
+              user_input = input()
+    if user_input == "give up":
+        return "give up"
+
+# General class to group and print answer messages as created by instances.
+class AnswerMessages:
+    def __init__(self):
+        self.correct = None
+        self.input_precursor = ""
+        self.try_again = f"\nTry again or enter \"give up\" to show the answer: {self.input_precursor}"
+        self.wrong = None
+    def print_msg(self, msg):
+        if msg == 1:
+            print(self.correct)
+        if msg == 2:
+            print(self.try_again)
+        if msg == 3:
+            print()
+            print(self.wrong)
+
+# Functions to check float and int values.
+
+def check_float_value(user_val, value_to_check, instance_name):
+    global completion
+    value_low = value_to_check - 0.005
+    value_high = value_to_check + 0.005
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif value_low < user_val < value_high:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
+def check_exact_value(user_val, value_to_check, instance_name):
+    global completion
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif user_val == value_to_check:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
 
 print("Values to be used in the problem:")
 print(f"Unit VC: ${unit_vc}\nTotal FC: ${total_fc}")
 print(f"Expected Sales: {expected_sales} units")
 
-unit_cost = unit_vc + total_fc / expected_sales
+unit_cost_msgs = AnswerMessages()
+unit_cost_msgs.correct = f"Correct! The unit cost is ${unit_cost:.2f}"
+unit_cost_msgs.wrong = f"The correct unit cost was ${unit_cost:.3f} rounded up or down as necessary.\n" \
+              f"Unit Cost is unit variable cost (Unit VC) + Unit Fixed Costs (Unit FC).\n" \
+              f"Unit FC is found by taking Total FC / Number of Units\n" \
+              f"This means ${unit_vc} - (${total_fc} / {expected_sales}) = ${unit_cost:.2f} in this case."
 
-user_unit_cost = float(input("What is the unit cost to produce one unit of the product? $"))
-
-unit_cost_low = unit_cost - 0.005
-unit_cost_high = unit_cost + 0.005
-
-if unit_cost_low < user_unit_cost < unit_cost_high:
-    print(f"Correct! The unit cost is ${unit_cost:.3f} (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_unit_cost = float(input())
-    if unit_cost_low < user_unit_cost < unit_cost_high:
-         print(f"Correct! The unit cost is ${unit_cost:.3f} (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_unit_cost = float(input())
-         if unit_cost_low < user_unit_cost < unit_cost_high:
-              print(f"Correct! The unit cost is ${unit_cost:.3f} (3 decimal places for reference).")
-         else:
-              print(f"The correct unit cost was ${unit_cost:.3f} rounded up or down as necessary.")
-              print(f"Unit Cost is unit variable cost (Unit VC) + Unit Fixed Costs (Unit FC).")
-              print(f"Unit FC is found by taking Total FC / Number of Units")
-              print(f"This means ${unit_vc} - (${total_fc} / {expected_sales}) = ${unit_cost:.3f} in this case.")
+Print("Good job!")
