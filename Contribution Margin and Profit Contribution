@@ -20,43 +20,107 @@ class Total:
         self.cm = unit.cm * self.expected_sales
         self.pc = unit.pc * self.expected_sales
 
+# Create appropriate exception classes for common input errors.
+class CommaError(Exception):
+    def __init__(self, value):
+        self.value = value
 
+class DollarSignError(Exception):
+    def __init__(self, value):
+        self.value = value
 
+class PercentError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+# General function to safely handle user input so the program does not break so easily.
+def get_user_input(print_message, float_or_int):
+    print(print_message, end="")
+    user_input = input()
+    while user_input != "give up":
+        try:
+            if "," in user_input:
+                raise CommaError("Invalid input. Do not enter the , sign")
+            if "%" in user_input:
+                raise PercentError("Invalid input. Do not enter the % sign.")
+            if "$" in user_input:
+                raise DollarSignError("Invalid Input. Do not enter the $ sign.")
+            user_input = float_or_int(user_input)
+            return user_input
+            break
+
+        except CommaError as excpt:
+              print(excpt)
+              user_input = input()
+        except PercentError as excpt:
+              print(excpt)
+              user_input = input()
+        except DollarSignError as excpt:
+              print(excpt)
+              user_input = input()
+        except:
+              print("Invalid Entry.")
+              user_input = input()
+    if user_input == "give up":
+        return "give up"
+
+# General class to group and print answer messages as created by instances.
+class AnswerMessages:
+    def __init__(self):
+        self.correct = None
+        self.input_precursor = ""
+        self.try_again = f"\nTry again or enter \"give up\" to show the answer: {self.input_precursor}"
+        self.wrong = None
+    def print_msg(self, msg):
+        if msg == 1:
+            print(self.correct)
+        if msg == 2:
+            print(self.try_again)
+        if msg == 3:
+            print()
+            print(self.wrong)
+
+# Functions to check float and int values.
+
+def check_float_value(user_val, value_to_check, instance_name):
+    global completion
+    value_low = value_to_check - 0.005
+    value_high = value_to_check + 0.005
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif value_low < user_val < value_high:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
+def check_exact_value(user_val, value_to_check, instance_name):
+    global completion
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif user_val == value_to_check:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
 
 print("Values to be used in the problem:")
 print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
 print(f"Unit Selling Price: ${selling_price}\nExpected Sales: {expected_sales} units")
 
-# Calculates the actual values
-unit_cm = selling_price - unit_vc
-percent_cm = ((unit_cm) / selling_price) * 100
-profit_contribution = (unit_cm - unit_fc)
-total_cm = unit_cm * expected_sales
-total_pc = profit_contribution * expected_sales
+completion = False
+while completion == False:
+    user_unit_cm = get_user_input("Enter the CM per unit in $ as a decimal up to 2 places: $", float)
+    check_float_value(user_unit_cm)
 
-# Unit Contributed Margin
-print()
-user_unit_cm = float(input("Enter the CM per unit in $ as a decimal up to 2 places: $"))
-
-unit_cm_low = unit_cm - 0.005
-unit_cm_high = unit_cm + 0.005
-
-if unit_cm_low < user_unit_cm < unit_cm_high:
-    print(f"Correct! The CM per unit is ${unit_cm:.3f} (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_unit_cm = float(input())
-    if unit_cm_low < user_unit_cm < unit_cm_high:
-        print(f"Correct! The CM per unit is ${unit_cm:.3f} (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_unit_cm = float(input())
-         if unit_cm_low < user_unit_cm < unit_cm_high:
-               print(f"Correct! The CM per unit is ${unit_cm:.3f} (3 decimal places for reference).")
-         else:
-              print(f"The correct CM per unit was ${unit_cm:.3f} rounded up or down as necessary.")
+unit_cm = AnswerMessages()
+unit_cm.correct = f"Correct! The CM per unit is ${unit_cm:.2f}."\
+unit_cm.wrong = f"The correct CM per unit was ${unit_cm:.3f} rounded up or down as necessary.\n" \
               print(f"Contributed margin is unit selling price - unit variable costs.")
               print(f"This means ${selling_price} - ${unit_vc} = ${unit_cm:.3f} in this case.")
+#REVISIONS RGIHT ABVOVE< MOVE answer mesages up.
 
 #Percent Contributed Margin
 print()
