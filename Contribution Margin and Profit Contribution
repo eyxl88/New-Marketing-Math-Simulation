@@ -141,11 +141,11 @@ while completion == False:
 print()
 
 profit_contribution = AnswerMessages()
-profit_contribution.correct = f"Correct! The profit contribution is ${profit_contribution:.2f}."
-profit_contribution.wrong = f"The correct profit contribution was ${profit_contribution:.2f}.\n" \              
+profit_contribution.correct = f"Correct! The profit contribution is ${unit.pc:.2f}."
+profit_contribution.wrong = f"The correct profit contribution was ${unit.pc:.2f}.\n" \              
             f"Profit contribution is (unit selling price - unit variable costs - fixed costs per unit.\n" \
             f"Fixed costs per unit are total fixed costs / expected number of units sold.\n" \
-            f"This means {selling_price} - {unit_vc} - {unit_fc} in this case."
+            f"This means {unit.selling_price} - {unit.vc} - {unit.fc} in this case."
 profit_contribution.precursor = "$"
 
 completion = False
@@ -155,27 +155,18 @@ while completion == False:
 
 # Total Contributed Margin
 print()
-user_total_cm = float(input("Enter the total CM as a decimal up to 2 places: $"))
+total_cm = AnswerMessages()
+total_cm.correct = f"Correct! The total CM is ${total.cm:.2f}."
+total_cm.wrong = f"The correct total CM was ${total.cm:.2f}.\n" \
+              f"Total contributed margin is unit contributed margin * expected sales in this case.\n" \
+              f"This means ${unit.cm} * {total.expected_sales} in this case."
 
-total_cm_low = total_cm - 0.005
-total_cm_high = total_cm + 0.005
+completion = False
+while completion == False:
+    user_total_cm = get_user_input("Enter the total CM as a decimal up to 2 places: $", float)
+    check_float_value(user_total_cm, total.cm, total_cm)
 
-if total_cm_low < user_total_cm < total_cm_high:
-    print(f"Correct! The total CM is ${total_cm:.3f} (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_total_cm = float(input())
-    if total_cm_low < user_total_cm < total_cm_high:
-         print(f"Correct! The total CM is ${total_cm:.3f} (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_total_cm = float(input())
-         if total_cm_low < user_total_cm < total_cm_high:
-              print(f"Correct! The total CM is ${total_cm:.3f} (3 decimal places for reference).")
-         else:
-              print(f"The correct total CM was ${total_cm:.3f} rounded up or down as necessary.")
-              print(f"Total contributed margin is unit ontributed margin * expected sales in this case.")
-              print(f"This means ${unit_cm} * {expected_sales} in this case.")
+# REVISIONS UP UNTIL THIS LINE: CONTINUE BELOW
 
 # Total Profit Contribution
 print()
