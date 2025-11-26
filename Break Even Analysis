@@ -15,11 +15,11 @@ class Unit():
 class Total():
     def __init__(self, unit_instance):
         self.expected_sales = random.randint(1000, 300000)
-        self.total_fc = round(unit_instance.fc * self.expected_sales, 2)
-        self.total_revenue = round(unit_instance.selling_price * self.expected_sales)
+        self.fc = round(unit_instance.fc * self.expected_sales, 2)
+        self.revenue = round(unit_instance.selling_price * self.expected_sales)
         # Market size must be greater than or equal to the revenue of the company thus the multiplication by a
         # Random number between 1 and 1000 to create the market size from the company's revenue.
-        self.market_size = round((random.uniform(1,1000) * self.total_revenue), 2)
+        self.market_size = round((random.uniform(1,1000) * self.revenue), 2)
 
 # Intialize class to store problem answers.
 class ProblemAnswers():
@@ -125,18 +125,18 @@ answer = ProblemAnswers(unit, total)
 
 print()
 print("Values to be used in the Break Even UNITS problem:")
-print(f"Unit Variable Cost: ${unit.vc}\nTotal Fixed Cost: ${total.fc}")
-print(f"Unit Selling Price: ${unit.selling_price}")
+print(f"Unit Variable Cost: ${unit.vc:.2f}\nTotal Fixed Cost: ${total.fc:,d}")
+print(f"Unit Selling Price: ${unit.selling_price:.2f}")
 
 # Break Even Units Question Setup
 
 print()
 
 be_units = AnswerMessages()
-be_units.correct = f"Correct! The Break Even number is {answer.be_units} units."
-be_units.wrong = f"The correct Break Even number was {answer.be_units_raw:.1f} units rounded up to a whole number.\n" \
-              print(f"The break even number is total fixed costs / unit selling price - variable costs per unit.\n" \
-              print(f"This means ${total.fc} / {unit.selling_price} + ${unit.vc} in this case."
+be_units.correct = f"Correct! The Break Even number is {answer.be_units:,d} units."
+be_units.wrong = f"The correct Break Even number was {answer.be_units_raw:,.1f} units rounded up to a whole number.\n" \
+              f"The break even number is total fixed costs / unit selling price - variable costs per unit.\n" \
+              f"This means (${total.fc:,d} / ${unit.selling_price:.2f}) + ${unit.vc:.2f} in this case."
 
 # Break Even Units Question
 
@@ -151,10 +151,10 @@ print()
 
 be_dollars = AnswerMessages()
 be_dollars.precursor = "$"
-be_dollars.correct = f"Correct! The Break Even total revenue is ${answer.be_dollars:.2f}."
-be_dollars.wrong = f"The correct Break Even total revenue was ${answer.be_dollars:.2f}.\n" \
+be_dollars.correct = f"Correct! The Break Even total revenue is ${answer.be_dollars:,.2f}."
+be_dollars.wrong = f"The correct Break Even total revenue was ${answer.be_dollars:,.2f}.\n" \
               f"Break even total revenue is Break Even Units * Selling Price of each unit.\n" \
-              f"This means ${answer.be_units} * ${unit.selling_price} in this case.")
+              f"This means {answer.be_units:,d} * ${unit.selling_price:.2f} in this case."
 
 # Break Even Dollars Question
 
@@ -166,16 +166,16 @@ while completion == False:
 # Break Even Market Share Question Set Up
 
 print()
-print(f"Assume that the total market size is ${total.market_size:.2f}")
+print(f"Assume that the total market size is ${total.market_size:,.2f}")
 be_ms = AnswerMessages()
 be_ms.correct = f"Correct! The Break Even market share is {answer.be_ms:.2f}%."
 be_ms.wrong = f"The correct Break Even market share was {answer.be_ms:.2f}%.\n" \
               f"Break even selling price is Break Even Sales Revenue / Total Market Sales.\n" \
-              f"This means ${answer.be_dollars:.2f} / ${total.market_size:.2f} in this case."
+              f"This means ${answer.be_dollars:,.2f} / ${total.market_size:,.2f} in this case."
 
 completion = False
 while completion == False:
-    user_be_ms = get_float_input("Input the market share the company needs to capture to break even as a percentage: ", float)
+    user_be_ms = get_user_input("Input the market share the company needs to capture to break even as a percentage: ", float)
     check_float_value(user_be_ms, answer.be_ms, be_ms)
 
 # Set up for Final Break Even Pricing Problem and change numbers.
@@ -184,11 +184,11 @@ print()
 
 unit2 = Unit()
 total2 = Total(unit2)
-answers2 = ProblemAnswers(unit2, total2)
+answer2 = ProblemAnswers(unit2, total2)
 
 print("Values to be used in the Break Even PRICING problem:")
-print(f"Unit Variable Cost: ${unit2.vc}\nTotal Fixed Cost: ${total2.fc}")
-print(f"Units sold: {unit2.expected_sales}")
+print(f"Unit Variable Cost: ${unit2.vc:.2f}\nTotal Fixed Cost: ${total2.fc:,d}")
+print(f"Units sold: {total2.expected_sales:,d}")
 
 # Find break-even selling price
 
@@ -198,10 +198,12 @@ be_selling_price = AnswerMessages()
 be_selling_price.precursor = "$"
 be_selling_price.correct = f"Correct! The Break Even selling price is ${answer2.be_selling_price:.2f}."
 be_selling_price.wrong = f"The correct Break Even selling price per unit was ${answer2.be_selling_price:.2f}.\n" \
-              f"Break even selling price is total fixed costs / expected sales + variable costs per unit.\n" \
-              f"This means ${total2.fc} / {unit2.expected_sales} + ${unit2.vc} in this case."
+              f"Break even selling price is (total fixed costs / expected sales) + variable costs per unit.\n" \
+              f"This means (${total2.fc:,d} / {total2.expected_sales:,d}) + ${unit2.vc:,.2f} in this case."
 
 completion = False
 while completion == False:
     user_selling_price = get_user_input("Enter the price at which the company must sell to break even (round to 2 decimals): $", float)
     check_float_value(user_selling_price, answer2.be_selling_price, be_selling_price)
+
+print("\nGood job!")
