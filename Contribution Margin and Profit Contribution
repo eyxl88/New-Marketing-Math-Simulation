@@ -1,4 +1,4 @@
-print("Welcome to Contribution Margin and Profit Contribution Practice")
+print("Welcome to Contribution Margin and Profit Contribution Practice\n")
 
 import random
 
@@ -8,17 +8,20 @@ class Unit:
         self.vc = round(random.uniform(2, 100), 2)
         self.profit = round(random.uniform(1, 15), 2)
         self.fc = round(random.uniform(1, 15), 2)
-        self.selling_price = unit_vc + unit_fc + unit_profit
-        self.dollar_cm = self.selling_price - self.vc
+        self.selling_price = round(self.vc + self.fc + self.profit, 2)
+        self.dollar_cm = round(self.selling_price - self.vc, 2)
         self.percent_cm = self.dollar_cm / self.selling_price * 100
-        self.dollar_pc = self.cm - self.fc
+        self.dollar_pc = round(self.dollar_cm - self.fc, 2)
+unit = Unit()
 
 # Initialize class Total to store the Total related variables in the problem.
 class Total:
     def __init__(self):
         self.expected_sales = random.randint(100, 1000)
-        self.cm = unit.cm * self.expected_sales
-        self.pc = unit.pc * self.expected_sales
+        self.fc = round(unit.fc * self.expected_sales, 2)
+        self.cm = round(unit.dollar_cm * self.expected_sales, 2)
+        self.pc = round(unit.dollar_pc * self.expected_sales, 2)
+total = Total()
 
 # Create appropriate exception classes for common input errors.
 class CommaError(Exception):
@@ -107,21 +110,22 @@ def check_exact_value(user_val, value_to_check, instance_name):
         instance_name.print_msg(2)
 
 print("Values to be used in the problem:")
-print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
-print(f"Unit Selling Price: ${selling_price}\nExpected Sales: {expected_sales} units")
+print(f"Unit Variable Cost: ${unit.vc}\nTotal Fixed Cost: ${total.fc}")
+print(f"Unit Selling Price: ${unit.selling_price}\nExpected Sales: {total.expected_sales} units")
 
 # Unit CM Problem Setup
+print()
 unit_cm = AnswerMessages()
-unit_cm.correct = f"Correct! The CM per unit is ${unit.dollars_cm:.2f}."\
-unit_cm.wrong = f"The correct CM per unit was ${unit.dollars_cm:.2f}.\n" \
+unit_cm.correct = f"Correct! The CM per unit is ${unit.dollar_cm:.2f}."
+unit_cm.wrong = f"The correct CM per unit was ${unit.dollar_cm:.2f}.\n" \
               f"Contributed margin is unit selling price - unit variable costs.\n" \
-              f"This means ${unit.selling_price} - ${unit.vc} = ${unit.dollars_cm:.3f} in this case.\n" \
+              f"This means ${unit.selling_price} - ${unit.vc} = ${unit.dollar_cm:.2f} in this case.\n"
 unit_cm.precursor = "$"
 
 completion = False
 while completion == False:
     user_unit_cm = get_user_input("Enter the CM per unit in $ as a decimal up to 2 places: $", float)
-    check_float_value(user_unit_cm, unit.dollars_cm, unit_cm)
+    check_float_value(user_unit_cm, unit.dollar_cm, unit_cm)
 
 # Percent Contribution Margin Problem Set up and Answers
 print()
@@ -130,7 +134,7 @@ percent_cm = AnswerMessages()
 percent_cm.correct = f"Correct! The percent CM is {unit.percent_cm:.2f}%."
 percent_cm.wrong = f"The correct percent CM was {unit.percent_cm:.2f}%.\n" \
             f"Percent CM is contribution margin divided by selling price (multiplied by 100 to make a percent).\n" \
-            f"In this case, this is {unit.dollars_cm} / {unit.selling_price} * 100."
+            f"In this case, this is {unit.dollar_cm} / {unit.selling_price} * 100."
 
 completion = False
 while completion == False:
@@ -141,8 +145,8 @@ while completion == False:
 print()
 
 profit_contribution = AnswerMessages()
-profit_contribution.correct = f"Correct! The profit contribution is ${unit.pc:.2f}."
-profit_contribution.wrong = f"The correct profit contribution was ${unit.pc:.2f}.\n" \              
+profit_contribution.correct = f"Correct! The profit contribution is ${unit.dollar_pc:.2f}."
+profit_contribution.wrong = f"The correct profit contribution was ${unit.dollar_pc:.2f}.\n" \
             f"Profit contribution is (unit selling price - unit variable costs - fixed costs per unit.\n" \
             f"Fixed costs per unit are total fixed costs / expected number of units sold.\n" \
             f"This means {unit.selling_price} - {unit.vc} - {unit.fc} in this case."
@@ -150,13 +154,35 @@ profit_contribution.precursor = "$"
 
 completion = False
 while completion == False:
-    user_profit_contribution = check_user_input("Enter the PC per unit as a decimal up to 2 places: $", float)
-    check_float_value(user_profit_contribution, unit.dollars_pc, profit_contribution)
+    user_profit_contribution = get_user_input("Enter the PC per unit as a decimal up to 2 places: $", float)
+    check_float_value(user_profit_contribution, unit.dollar_pc, profit_contribution)
 
 # Total Contributed Margin
 print()
 total_cm = AnswerMessages()
 total_cm.correct = f"Correct! The total CM is ${total.cm:.2f}."
+total_cm.wrong = f"The correct total CM was ${total.cm:.2f}.\n" \
+              f"Total contributed margin is unit contributed margin * expected sales in this case.\n" \
+              f"This means ${unit.dollar_cm} * {total.expected_sales} in this case."
+
+completion = False
+while completion == False:
+    user_total_cm = get_user_input("Enter the total CM as a decimal up to 2 places: $", float)
+    check_float_value(user_total_cm, total.cm, total_cm)
+
+# Total Profit Contribution
+print()
+total_pc = AnswerMessages()
+total_pc.correct = f"Correct! The total PC is ${total.pc:.2f}."
+total_pc.wrong = f"The correct total PC was ${total.pc:.2f}.\n" \
+              f"Total contributed margin is unit contributed margin * expected sales in this case.\n" \
+              f"This means ${unit.dollar_pc} * {total.expected_sales} in this case."
+total_pc.precursor = "$"
+
+completion = False
+while completion == False:
+    user_total_pc = get_user_input("Enter the total PC as a decimal up to 2 places: $", float)
+    check_float_value(user_total_pc, total.pc, total_pc)
 total_cm.wrong = f"The correct total CM was ${total.cm:.2f}.\n" \
               f"Total contributed margin is unit contributed margin * expected sales in this case.\n" \
               f"This means ${unit.dollars_cm} * {total.expected_sales} in this case."
