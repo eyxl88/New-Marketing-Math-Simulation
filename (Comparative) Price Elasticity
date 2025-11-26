@@ -1,0 +1,162 @@
+# Price Elasticity and Comparitive Price Elasticity
+
+print("Welcome to Price Elasticity and Comparitive Price Elasticity Practice!")
+
+import random
+plus_minus = random.randint(0,1)
+
+a_sales_old = random.randint(500000, 10000000)
+a_price_old = float(str(random.randint(10,30)) + "." + str(random.randint(10,99)))
+a_price_change = float(str(random.randint(0,7)) + "." + str(random.randint(10,99)))
+a_sales_change = random.randrange(200000, 2000000)
+inc_decr = "increased"
+
+if plus_minus == 0:
+    inc_decr = "decreased"
+    a_price_change = -a_price_change
+
+if plus_minus == 1:
+    a_sales_change = -a_sales_change
+
+a_price_new = a_price_old + a_price_change
+a_sales_new = a_sales_old + a_sales_change
+
+b_sales_old = random.randint(500000, 10000000)
+plus_minus = random.randint(2,3)
+b_sales_change = random.randint(1000, 1000000)
+
+if plus_minus == 2:
+    b_sales_change = -b_sales_change
+
+b_sales_new = b_sales_old + b_sales_change
+
+a_change_demand = ((a_sales_new - a_sales_old) / a_sales_old) * 100
+a_change_price = ((a_price_new - a_price_old) / a_price_old) * 100
+a_price_elasticity = a_change_demand / a_change_price
+b_change_demand = ((b_sales_new - b_sales_old) / b_sales_old) * 100
+ab_price_elasticity = b_change_demand / a_change_price
+
+if a_price_elasticity < -1:
+    a_elastic = "Elastic"
+    a_recommendation = "decrease"
+elif a_price_elasticity > -1 and a_price_elasticity < 0:
+    a_elastic = "Inelastic"
+    a_recommendation = "increase"
+elif math.floor(a_price_elasticity,2) == 0 or math.ceil(a_price_elasticity,2) == 0:
+    a_elastic = "Perfectly inelastic"
+    a_recommendation = "increase"
+elif math.floor(a_price_elasticity,2) == -1 or math.ceil(a_price_elasticity,2) == -1:
+    a_elastic = "Unitary elastic"
+    a_recommendation = "remains constant"
+
+if ab_price_elasticity < 0:
+    ab_status = "complementary products"
+elif ab_price_elasticity > 0:
+    ab_status = "substitute products"
+
+# Set up for Company A
+print(f"Last year, Company A sold {a_sales_old:,d} units priced at ${a_price_old:.2f}.")
+print(f"This year, Company A {inc_decr} the price to ${a_price_new:.2f} and sold {a_sales_new:,d} units.")
+
+# Price Elasticity of Company A
+print()
+user_a_price_elasticity = float(input("Enter the Price Elasticity number of Company A, rounding to 2 decimal places: "))
+
+a_price_elasticity_low = a_price_elasticity - 0.005
+a_price_elasticity_high = a_price_elasticity + 0.005
+
+if a_price_elasticity_low < user_a_price_elasticity < a_price_elasticity_high:
+    print(f"Correct! The price elasticity for Company A is {a_price_elasticity:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_a_price_elasticity = float(input())
+    if a_price_elasticity_low < user_a_price_elasticity < a_price_elasticity_high:
+         print(f"Correct! The price elasticity for Company A is {a_price_elasticity:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_a_price_elasticity = float(input())
+         if a_price_elasticity_low < user_a_price_elasticity < a_price_elasticity_high:
+              print(f"Correct! The price elasticity for Company A is {a_price_elasticity:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct percent Price Elasticity for Company A was {a_price_elasticity:.3f} rounded up or down as necessary.")
+              print(f"Price elasticity is the % change in demand divided by the % change in price.")
+              print(f"% change in demand is (new sales - old sales) / old sales * 100 or ({a_sales_new} - {a_sales_old}) / {a_sales_old} * 100.")
+              print(f"% change in price is (new price - old price) / old price * 100 or ({a_price_new} - {a_price_old}) / {a_price_old} * 100.")
+              print(f"So the price elasticity is {a_change_demand}% / {a_change_price}%.")
+print()
+
+user_price_elastic = input("Enter \"Elastic\", \"Inelastic\", \"Unitary Elastic\" or \"Perfectly inelastic\" to describe price elasticity of Company A: ")
+if user_price_elastic == a_elastic:
+    print(f"Correct. Company A's price elasticity of {a_price_elasticity} means that the price is {a_elastic}")
+else:
+    print(f"Company A's price elasticity was {a_elastic} because its price elasticity was {a_price_elasticity}.")
+    print(f"If price elasticity is less than -1, then the price elasticity is considered elastic.")
+    print(f"If price elasticity is -1, then the price elasticity is considered unitary elastic.")
+    print(f"If price elasticity is between -1 and 0 non-inclusive, price elasticity is considered inelastic.")
+    print(f"If price elasticity is 0, then price elasticity is considered perfectly inelastic.")
+
+print()
+print("Enter \"increase\", \"remains constant\" or \"decrease\".")
+user_a_recommendation = input("An 1% increase in price will mean that revenues ")
+if user_a_recommendation == a_recommendation:
+    print(f"Correct. Company A's product demand is {a_elastic} so an increase in price makes revenues {a_recommendation}.")
+else:
+    print(f"The correct answer was {a_recommendation} since Company A is {a_elastic}.")
+    print(f"For elastic price elasticity, a 1% increase in price results in a greater decrease in demand and revenue.")
+    print(f"For inelastic and perfectly inelastic PE, a 1% increase in price results in an overall increase in revenue.")
+    print("since demand is not affected that much.")
+    print(f"For unitary elastic PE, a 1% increase in price results in an equal decrease in demand, so revenue stays the same no matter what.")
+print()
+
+# Comparative Price Elasticity
+# Set up for Company A and Company B
+print(f"Last year, Company B sold {b_sales_old:,d} units but this year Company B sold {b_sales_new:,d}.")
+print(f"Last year, Company A set its prices at ${a_price_old:.2f}.")
+print(f"This year Company A {inc_decr} their prices to ${a_price_new:.2f}.")
+print()
+
+# Price Elasticity of Company A
+user_ab_price_elasticity = float(input("Enter the Comparitive Price Elasticity for Companies A and B, rounding to 2 decimal places: "))
+
+ab_price_elasticity_low = ab_price_elasticity - 0.005
+ab_price_elasticity_high = ab_price_elasticity + 0.005
+
+if ab_price_elasticity_low < user_ab_price_elasticity < ab_price_elasticity_high:
+    print(f"Correct! The CPE for Companies A and B is {ab_price_elasticity:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_ab_price_elasticity = float(input())
+    if ab_price_elasticity_low < user_ab_price_elasticity < ab_price_elasticity_high:
+         print(f"Correct! The CPE for Companies A and B is {ab_price_elasticity:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_ab_price_elasticity = float(input())
+         if ab_price_elasticity_low < user_ab_price_elasticity < ab_price_elasticity_high:
+              print(f"Correct! The CPE for Companies A and B is {ab_price_elasticity:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct CPE for Companies A and B was {ab_price_elasticity:.3f} rounded up or down as necessary.")
+              print(f"CPE is the % change in demand for Product B divided by the % change in price for Product A.")
+              print(f"% change in demand is (new sales - old sales) / old sales * 100 or ({b_sales_new} - {b_sales_old}) / {b_sales_old} * 100.")
+              print(f"% change in price is (new price - old price) / old price * 100 or ({a_price_new} - {a_price_old}) / {a_price_old} * 100.")
+              print(f"So the CPE is {b_change_demand}% / {a_change_price}%.")
+if ab_price_elasticity > 0:
+    ab_sign = "positive"
+if ab_price_elasticity < 0:
+    ab_sign = "negative"
+
+print()
+print("Enter \"subsitute products\" or \"complementary products\" (capitalization matters)")
+user_ab_status = input("Company A and Company B sell ")
+
+if user_ab_status == ab_status:
+    print(f"Correct. Company A and Company B sell {ab_status} since the CPE is {ab_price_elasticity} which is {ab_sign}.")
+else:
+    print(f"The correct answer was {ab_status} since their CPE is {ab_price_elasticity} which is {ab_sign}.")
+    if ab_sign == "negative":
+        print(f"When CPE is negative, this means that an increase in price in one results in a decrease in demand for the other.")
+        print(f"Negative CPE means they are complementary products, like bread and butter, which are often bought in corelation to one another.")
+        print(f"If one product becomes more expensive, people are less likely to buy it as well as other products which are used with it.")
+    if ab_sign == "positive":
+        print("When CPE is positive, this means that an increase in price in one results in an increase in demand for the other.")
+        print(f"Positive CPE means they are subsitute products and people buy either one produce or the other.")
+        print(f"If one becomes more expensive, demand for the other cheaper product will increase.")
