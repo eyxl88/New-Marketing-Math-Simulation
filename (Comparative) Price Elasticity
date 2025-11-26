@@ -2,63 +2,57 @@
 
 print("Welcome to Price Elasticity and Comparative Price Elasticity Practice!")
 
+global completion
+
 import random
 import math
 
-plus_minus = random.randint(0,1)
+# Useful Randomized Sign Function
+def random_sign(value=0):
+    plus_minus = random.randint(0,1)
+        if plus_minus == 0:
+            value = -value
+        return value
 
-a_sales_old = random.randint(500000, 10000000)
-a_price_old = float(str(random.randint(10,30)) + "." + str(random.randint(10,99)))
-a_price_change = float(str(random.randint(0,7)) + "." + str(random.randint(10,99)))
-a_sales_change = random.randrange(200000, 2000000)
-inc_decr = "increased"
+class Company():
+    def __init__(self, sales_change_low, sales_change_high):
+        self.sales_old = random.randint(500000, 10000000)
+        self.sales_change = random_sign(random.randrange(sales_change_low, sales_change_low))
+        self.sales_new = self.sales_old + self.sales_change
 
-if plus_minus == 0:
-    inc_decr = "decreased"
-    a_price_change = -a_price_change
+        self.price_old = round(random.uniform(10, 30), 2)
+        self.price_change = random_sign(round(random.uniform(0, 7), 2))
+        self.price_new = self.price_old + self.price_change
 
-if plus_minus == 1:
-    a_sales_change = -a_sales_change
+        self.incr_decr = "decreased" if self.price_change < 0 else "increased"
 
-a_price_new = a_price_old + a_price_change
-a_sales_new = a_sales_old + a_sales_change
+        self.change_demand = ((company.sales_new - company.sales_old) / company.sales_old) * 100
+        self.change_price = ((company.price_new - company.price_old) / company.price_old) * 100
+        self.price_elasticity = self.change_demand / self.change_price
 
-b_sales_old = random.randint(500000, 10000000)
-plus_minus = random.randint(2,3)
-b_sales_change = random.randint(1000, 1000000)
+        if self.price_elasticity < -1:
+            self.elastic = "elastic"
+            self.recommendation = "decrease"
+        elif self.price_elasticity > -1 and self.price_elasticity < 0:
+            self.elastic = "inelastic"
+            self.recommendation = "increase"
+        elif math.floor(self.price_elasticity, 2) == 0 or math.ceil(self.price_elasticity, 2) == 0:
+            self.elastic = "perfectlyinelastic"
+            self.recommendation = "increase"
+        elif math.floor(self.price_elasticity, 2) == -1 or math.ceil(self.price_elasticity, 2) == -1:
+            self.elastic = "unitaryelastic"
+            self.recommendation = "remainsconstant"
 
-if plus_minus == 2:
-    b_sales_change = -b_sales_change
+a = Company(200000, 2000000)
+b = Company(1000, 1000000)
 
-b_sales_new = b_sales_old + b_sales_change
+class ProblemAnswers():
+    def __init__(self):
+        self.price_elasticity = b.change_demand / a.change_price
+        self.status = "complementary products" if self.price_elasticity < 0 \ 
+                else "substitute products" if self.price_elasticity > 0
 
-a_change_demand = ((a_sales_new - a_sales_old) / a_sales_old) * 100
-a_change_price = ((a_price_new - a_price_old) / a_price_old) * 100
-a_price_elasticity = a_change_demand / a_change_price
-b_change_demand = ((b_sales_new - b_sales_old) / b_sales_old) * 100
-ab_price_elasticity = b_change_demand / a_change_price
-
-if a_price_elasticity < -1:
-    a_elastic = "Elastic"
-    a_recommendation = "decrease"
-elif a_price_elasticity > -1 and a_price_elasticity < 0:
-    a_elastic = "Inelastic"
-    a_recommendation = "increase"
-elif math.floor(a_price_elasticity,2) == 0 or math.ceil(a_price_elasticity,2) == 0:
-    a_elastic = "Perfectly inelastic"
-    a_recommendation = "increase"
-elif math.floor(a_price_elasticity,2) == -1 or math.ceil(a_price_elasticity,2) == -1:
-    a_elastic = "Unitary elastic"
-    a_recommendation = "remains constant"
-
-if ab_price_elasticity < 0:
-    ab_status = "complementary products"
-elif ab_price_elasticity > 0:
-    ab_status = "substitute products"
-
-# Set up for Company A
-print(f"Last year, Company A sold {a_sales_old:,d} units priced at ${a_price_old:.2f}.")
-print(f"This year, Company A {inc_decr} the price to ${a_price_new:.2f} and sold {a_sales_new:,d} units.")
+ans_ab = ProblemAnswers()
 
 # General function to safely handle user input so the program does not break so easily.
 def get_user_input(print_message, float_or_int):
@@ -144,7 +138,9 @@ def check_exact_value(user_val, value_to_check, instance_name):
     else:
         instance_name.print_msg(2)
 
-
+# Set up for Company A
+print(f"Last year, Company A sold {a_sales_old:,d} units priced at ${a_price_old:.2f}.")
+print(f"This year, Company A {inc_decr} the price to ${a_price_new:.2f} and sold {a_sales_new:,d} units.")
 
 # Price Elasticity of Company A
 print()
