@@ -3,16 +3,44 @@ print("Welcome to Break Even Analysis Practice")
 import random
 import math
 
-unit_vc = random.randint(2, 100)
-unit_profit = random.randint(1, 15)
-expected_sales = random.randint(1000, 300000)
-unit_fc = random.randint(1, 15)
-total_fc = unit_fc * expected_sales
-selling_price = unit_vc + unit_fc + unit_profit
+# Intialize class Unit to store unit probolem values.
+class Unit():
+    def __init__(self):
+        self.vc = round(random.uniform(2, 100), 2)
+        self.profit = round(random.randint(1, 15), 2)
+        self.fc = round(random.randint(1, 15), 2)
+        self.selling_price = round(self.vc + self.fc + self.profit, 2)
+
+unit = Unit()
+
+# Initialize Class Total to store total problem values.
+class Total():
+    def __init__(self):
+        self.expected_sales = random.randint(1000, 300000)
+        self.total_fc = round(unit.fc * self.expected_sales, 2)
+        self.total_revenue = round(unit.selling_price * self.expected_sales)
+        # Market size must be greater than or equal to the revenue of the company thus the multiplication by a
+        # Random number between 1 and 1000 to create the market size from the company's revenue.
+        self.market_size = round((random.uniform(1,1000) * self.total_revenue), 2)
+
+total = Total()
+
+# Intialize class to store problem answers.
+class ProblemAnswers():
+    def __init__(self):
+        self.be_units = math.ceil(total.fc / (unit.selling_price - unit.vc))
+        self.be_dollars = round(self.be_units * unit.selling_price, 2)
+        self.be_ms = self.be_dollars / total.market_size
+        self.be_selling_price = round(total.fc / total.expected_sales + unit.vc, 2) 
+        # Should be equal to unit.selling_price but to prevent any rounding issues the math is done here.
+
+answers = ProblemAnswwers()
+
+# REVISIONS UP UNTIL THIS LINE. MUST ADD BACK OTHER CLASSES AND FUNCTIONS FOR ANSWERING / INTERFACE!
 
 print("Values to be used in the Break Even UNITS problem:")
-print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
-print(f"Unit Selling Price: ${selling_price}")
+print(f"Unit Variable Cost: ${unit.vc}\nTotal Fixed Cost: ${total.fc}")
+print(f"Unit Selling Price: ${unit.selling_price}")
 
 # Find break-even units.
 print()
@@ -93,9 +121,10 @@ else:
 print()
 random_number = random.randint(1,100)
 
-total_fc = total_fc + random_number * 2
-expected_sales = expected_sales + random_number * 3
-unit_vc = unit_vc + random_number * 3
+unit2 = Unit()
+total2 = Total()
+answers2 = Answers()
+
 print("Values to be used in the Break Even PRICING problem:")
 print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
 print(f"Units sold: {expected_sales}")
