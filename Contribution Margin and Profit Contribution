@@ -159,35 +159,23 @@ total_cm = AnswerMessages()
 total_cm.correct = f"Correct! The total CM is ${total.cm:.2f}."
 total_cm.wrong = f"The correct total CM was ${total.cm:.2f}.\n" \
               f"Total contributed margin is unit contributed margin * expected sales in this case.\n" \
-              f"This means ${unit.cm} * {total.expected_sales} in this case."
+              f"This means ${unit.dollars_cm} * {total.expected_sales} in this case."
 
 completion = False
 while completion == False:
     user_total_cm = get_user_input("Enter the total CM as a decimal up to 2 places: $", float)
     check_float_value(user_total_cm, total.cm, total_cm)
 
-# REVISIONS UP UNTIL THIS LINE: CONTINUE BELOW
-
 # Total Profit Contribution
 print()
-user_total_pc = float(input("Enter the total PC as a decimal up to 2 places: $"))
+total_pc = AnswerMessages()
+total_pc.correct = f"Correct! The total PC is ${total.pc:.2f}."
+total_pc.wrong = f"The correct total PC was ${total.pc:.2f}.\n" \
+              f"Total contributed margin is unit contributed margin * expected sales in this case.\n" \
+              f"This means ${unit.dollars_pc} * {total.expected_sales} in this case."
+total_pc.precursor = "$"
 
-total_pc_low = total_pc - 0.005
-total_pc_high = total_pc + 0.005
-
-if total_pc_low < user_total_pc < total_pc_high:
-    print(f"Correct! The total PC is ${total_pc:.3f} (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_total_pc = float(input())
-    if total_pc_low < user_total_pc < total_pc_high:
-         print(f"Correct! The total PC is ${total_pc:.3f} (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_total_pc = float(input())
-         if total_pc_low < user_total_pc < total_pc_high:
-              print(f"Correct! The total PC is ${total_pc:.3f} (3 decimal places for reference).")
-         else:
-              print(f"The correct total PR was ${total_pc:.3f} rounded up or down as necessary.")
-              print(f"Total contributed margin is unit ontributed margin * expected sales in this case.")
-              print(f"This means ${unit_pc} * {expected_sales} in this case.")
+completion = False
+while completion == False:
+    user_total_pc = get_user_input("Enter the total PC as a decimal up to 2 places: $", float)
+    check_float_value(user_total_pc, total.pc, total_pc)
