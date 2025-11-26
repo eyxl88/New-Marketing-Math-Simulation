@@ -1,11 +1,11 @@
 import random
 
 # Set problem values.
-unit_vc = random.uniform(2, 100)
+unit_vc = round(random.uniform(2, 100), 2)
 expected_sales = random.randint(100, 1000)
-unit_fc = random.uniform(1, 15)
+unit_fc = round(random.uniform(1, 15), 2)
 total_fc = round(unit_fc * expected_sales, 2)
-unit_cost = unit_vc + total_fc / expected_sales
+unit_cost = round(unit_vc + total_fc / expected_sales, 2)
 
 # Create appropriate exception classes for common input errors.
 class CommaError(Exception):
@@ -99,9 +99,15 @@ print(f"Expected Sales: {expected_sales} units")
 
 unit_cost_msgs = AnswerMessages()
 unit_cost_msgs.correct = f"Correct! The unit cost is ${unit_cost:.2f}"
-unit_cost_msgs.wrong = f"The correct unit cost was ${unit_cost:.3f} rounded up or down as necessary.\n" \
+unit_cost_msgs.wrong = f"The correct unit cost was ${unit_cost:.2f}.\n" \
               f"Unit Cost is unit variable cost (Unit VC) + Unit Fixed Costs (Unit FC).\n" \
               f"Unit FC is found by taking Total FC / Number of Units\n" \
               f"This means ${unit_vc} - (${total_fc} / {expected_sales}) = ${unit_cost:.2f} in this case."
 
-Print("Good job!")
+print()
+completion = False
+while completion == False:
+    user_unit_cost = get_user_input("Enter the unit cost in dollars up to 2 decimal places: $", float)
+    check_float_value(user_unit_cost, unit_cost, unit_cost_msgs)
+
+print("Good job!")
