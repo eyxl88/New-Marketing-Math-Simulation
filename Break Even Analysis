@@ -1,0 +1,126 @@
+print("Welcome to Break Even Analysis Practice")
+
+import random
+import math
+
+unit_vc = random.randint(2, 100)
+unit_profit = random.randint(1, 15)
+expected_sales = random.randint(1000, 300000)
+unit_fc = random.randint(1, 15)
+total_fc = unit_fc * expected_sales
+selling_price = unit_vc + unit_fc + unit_profit
+
+print("Values to be used in the Break Even UNITS problem:")
+print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
+print(f"Unit Selling Price: ${selling_price}")
+
+# Find break-even units.
+print()
+be_units_raw = total_fc / (selling_price - unit_vc)
+be_units = math.ceil(total_fc / (selling_price - unit_vc))
+user_be_units = int(input("Enter the number of units the company must sell to break even (round up to whole number): "))
+
+if user_be_units == be_units:
+    print(f"Correct! The Break Even number is {be_units_raw:.1f} units (1 decimal place for reference).")
+else:
+    print("Try again.")
+    user_be_units = float(input())
+    if user_be_units == be_units:
+         print(f"Correct! The Break Even number is {be_units_raw:.1f} units (1 decimal place for reference).")
+    else:
+         print("Try again. Last try.")
+         user_be_units = float(input())
+         if user_be_units == be_units:
+              print(f"Correct! The Break Even number is {be_units_raw:.1f} units (1 decimal place for reference).")
+         else:
+              print(f"The correct Break Even number was {be_units_raw:.1f} units rounded up to a whole number.")
+              print(f"The break even number is total fixed costs / unit selling price - variable costs per unit")
+              print(f"This means ${total_fc} / {selling_price} + ${unit_vc} in this case.")
+
+# Find Break even units in total amount of dollars:
+print()
+be_dollars = be_units * selling_price
+user_be_dollars = float(input("Enter the total amount of sales revenue that the company needs to break even: $"))
+be_dollars_low = be_dollars - 0.005
+be_dollars_high = be_dollars + 0.005
+
+if be_dollars_low < user_be_dollars < be_dollars_high:
+    print(f"Correct! The Break Even total revenue is ${be_dollars:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_be_dollars = float(input("$"))
+    if be_dollars_low < user_be_dollars < be_dollars_high:
+         print(f"Correct! The Break Even total revenue is ${be_dollars:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_be_dollars = float(input("$"))
+         if be_dollars_low < user_be_dollars < be_dollars_high:
+              print(f"Correct! The Break Even total revenue is ${be_dollars:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct Break Even total revenue was ${be_dollars:.3f} rounded up or down as necessary.")
+              print(f"Break even total revenue is Break Even Units * Selling Price of each unit")
+              print(f"This means ${be_units} * ${selling_price} in this case.")
+
+# Break Even Market Share
+print()
+market_size = float(str(random.randint(1,1000)) + "." + str(random.randint(0,9)))
+market_size = market_size * be_dollars
+be_ms = be_dollars / market_size * 100
+be_ms_high = be_ms + 0.005
+be_ms_low = be_ms - 0.005
+
+print(f"Assume that the total market share is ${market_size:.2f}")
+user_be_ms = float(input("Input the market share the company needs to capture to break even as a percentage: "))
+
+if be_ms_low < user_be_ms < be_ms_high:
+    print(f"Correct! The Break Even market share is {be_ms:.3f}% (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_be_ms = float(input())
+    if be_ms_low < user_be_ms < be_ms_high:
+         print(f"Correct! The Break Even market share is {be_ms:.3f}% (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_be_ms = float(input())
+         if be_ms_low < user_be_ms < be_ms_high:
+              print(f"Correct! The Break Even market share is {be_ms:.3f}% (3 decimal places for reference).")
+         else:
+              print(f"The correct Break Even market share was {be_ms:.3f}% rounded up or down as necessary.")
+              print(f"Break even selling price is Break Even Sales Revenue / Total Market Sales")
+              print(f"This means ${be_dollars} / ${market_size:.2f} in this case.")
+
+# Set up for break-even selling price:
+print()
+random_number = random.randint(1,100)
+
+total_fc = total_fc + random_number * 2
+expected_sales = expected_sales + random_number * 3
+unit_vc = unit_vc + random_number * 3
+print("Values to be used in the Break Even PRICING problem:")
+print(f"Unit Variable Cost: ${unit_vc}\nTotal Fixed Cost: ${total_fc}")
+print(f"Units sold: {expected_sales}")
+
+# Find break-even selling price:
+print()
+selling_price = (total_fc / be_units) + unit_vc
+user_selling_price = float(input("Enter the price at which the company must sell to break even (round UP to 2 decimals): $"))
+
+selling_price_low = selling_price - 0.005
+selling_price_high = selling_price + 0.005
+
+if selling_price_low < user_selling_price < selling_price_high:
+    print(f"Correct! The Break Even selling price is ${selling_price:.3f} (3 decimal places for reference).")
+else:
+    print("Try again.")
+    user_selling_price = float(input("$"))
+    if selling_price_low < user_selling_price < selling_price_high:
+         print(f"Correct! The Break Even selling price is ${selling_price:.3f} (3 decimal places for reference).")
+    else:
+         print("Try again. Last try.")
+         user_selling_price = float(input("$"))
+         if selling_price_low < user_selling_price < selling_price_high:
+              print(f"Correct! The Break Even selling price is ${selling_price:.3f} (3 decimal places for reference).")
+         else:
+              print(f"The correct Break Even selling price per unit was ${selling_price:.3f} rounded up or down as necessary.")
+              print(f"Break even selling price is total fixed costs / expected sales + variable costs per unit")
+              print(f"This means ${total_fc} / {expected_sales} + ${unit_vc} in this case.")
