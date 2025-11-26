@@ -1,10 +1,10 @@
-# Price Elasticity and Comparitive Price Elasticity
+# Price Elasticity and Comparative Price Elasticity
 
-print("Welcome to Price Elasticity and Comparitive Price Elasticity Practice!")
-# TODO: MUST UPDATE THE GET USER INPUT function to have a STRING option. Splitting, stripping, lower case, non-letter removal and rejoin.
-# TODO: MUST UPDATE THE CHECK_EXACT_VALUE function to have a STRING option. Not sure if it only does ints or can compare strings.
+print("Welcome to Price Elasticity and Comparative Price Elasticity Practice!")
 
 import random
+import math
+
 plus_minus = random.randint(0,1)
 
 a_sales_old = random.randint(500000, 10000000)
@@ -59,6 +59,92 @@ elif ab_price_elasticity > 0:
 # Set up for Company A
 print(f"Last year, Company A sold {a_sales_old:,d} units priced at ${a_price_old:.2f}.")
 print(f"This year, Company A {inc_decr} the price to ${a_price_new:.2f} and sold {a_sales_new:,d} units.")
+
+# General function to safely handle user input so the program does not break so easily.
+def get_user_input(print_message, float_or_int):
+    print(print_message, end="")
+    user_input = input()
+    while user_input != "give up":
+        try:
+            if float_or_int == float or float_or_int == int:
+                if "," in user_input:
+                    raise CommaError("Invalid input. Do not enter the , sign")
+                if "%" in user_input:
+                    raise PercentError("Invalid input. Do not enter the % sign.")
+                if "$" in user_input:
+                    raise DollarSignError("Invalid Input. Do not enter the $ sign.")
+                user_input = float_or_int(user_input)
+                return user_input
+                break
+            if float_or_int == "string":
+                user_input_list = user_input.strip().lower().split() # Remove whitespace + capitalization
+                for i in range(len(user_input_list[:])): # Iterate over copy of list of words.
+                    temp_var = "" # Initialize puncutation removal variable.
+                    for letter in user_input_list[:][i]: # For each letter in each word in the list
+                        if letter.isalnum() and not letter.isdigit():
+                            temp_var += letter # Add letters to the temp string (exclude numbers / puncutation)
+                    user_input_list[i] = temp_var # Set list item equal to the transformed string.
+                user_input = "".join(user_input_list) # Combine all list items back into one long string without spaces.
+                return user_input
+
+        except CommaError as excpt:
+              print(excpt)
+              user_input = input()
+        except PercentError as excpt:
+              print(excpt)
+              user_input = input()
+        except DollarSignError as excpt:
+              print(excpt)
+              user_input = input()
+        except:
+              print("Invalid Entry.")
+              user_input = input()
+    if user_input == "give up":
+        return "give up"
+
+# General class to group and print answer messages as created by instances.
+class AnswerMessages:
+    def __init__(self):
+        self.correct = None
+        self.input_precursor = ""
+        self.try_again = f"\nTry again or enter \"give up\" to show the answer: {self.input_precursor}"
+        self.wrong = None
+    def print_msg(self, msg):
+        if msg == 1:
+            print(self.correct)
+        if msg == 2:
+            print(self.try_again)
+        if msg == 3:
+            print()
+            print(self.wrong)
+
+# Functions to check float and int values.
+
+def check_float_value(user_val, value_to_check, instance_name):
+    global completion
+    value_low = value_to_check - 0.005
+    value_high = value_to_check + 0.005
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif value_low < user_val < value_high:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
+def check_exact_value(user_val, value_to_check, instance_name):
+    global completion
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif user_val == value_to_check:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
+
 
 # Price Elasticity of Company A
 print()
