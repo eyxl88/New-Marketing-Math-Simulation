@@ -31,6 +31,92 @@ class ProblemAnswers():
         self.be_selling_price = round(total_instance.fc / total_instance.expected_sales + unit.vc, 2) 
         # Should be equal to unit_instance.selling_price but to prevent any rounding issues the math is done here.
 
+# Create appropriate exception classes for common input errors.
+class CommaError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+class DollarSignError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+class PercentError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+# General function to safely handle user input so the program does not break so easily.
+def get_user_input(print_message, float_or_int):
+    print(print_message, end="")
+    user_input = input()
+    while user_input != "give up":
+        try:
+            if "," in user_input:
+                raise CommaError("Invalid input. Do not enter the , sign")
+            if "%" in user_input:
+                raise PercentError("Invalid input. Do not enter the % sign.")
+            if "$" in user_input:
+                raise DollarSignError("Invalid Input. Do not enter the $ sign.")
+            user_input = float_or_int(user_input)
+            return user_input
+            break
+
+        except CommaError as excpt:
+              print(excpt)
+              user_input = input()
+        except PercentError as excpt:
+              print(excpt)
+              user_input = input()
+        except DollarSignError as excpt:
+              print(excpt)
+              user_input = input()
+        except:
+              print("Invalid Entry.")
+              user_input = input()
+    if user_input == "give up":
+        return "give up"
+
+# General class to group and print answer messages as created by instances.
+class AnswerMessages:
+    def __init__(self):
+        self.correct = None
+        self.input_precursor = ""
+        self.try_again = f"\nTry again or enter \"give up\" to show the answer: {self.input_precursor}"
+        self.wrong = None
+    def print_msg(self, msg):
+        if msg == 1:
+            print(self.correct)
+        if msg == 2:
+            print(self.try_again)
+        if msg == 3:
+            print()
+            print(self.wrong)
+
+# Functions to check float and int values.
+
+def check_float_value(user_val, value_to_check, instance_name):
+    global completion
+    value_low = value_to_check - 0.005
+    value_high = value_to_check + 0.005
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif value_low < user_val < value_high:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
+def check_exact_value(user_val, value_to_check, instance_name):
+    global completion
+    if user_val == "give up":
+        instance_name.print_msg(3)
+        completion = True
+    elif user_val == value_to_check:
+        instance_name.print_msg(1)
+        completion = True
+    else:
+        instance_name.print_msg(2)
+
 # Set up for first half of the problems.
 
 unit = Unit()
