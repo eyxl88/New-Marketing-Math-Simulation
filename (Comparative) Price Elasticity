@@ -26,10 +26,12 @@ class Company():
 
         self.incr_decr = "decreased" if self.price_change < 0 else "increased"
 
+        # Set problem answer values
         self.change_demand = ((company.sales_new - company.sales_old) / company.sales_old) * 100
         self.change_price = ((company.price_new - company.price_old) / company.price_old) * 100
         self.price_elasticity = self.change_demand / self.change_price
 
+        # Set short answer strings.
         if self.price_elasticity < -1:
             self.elastic = "elastic"
             self.recommendation = "decrease"
@@ -43,16 +45,11 @@ class Company():
             self.elastic = "unitaryelastic"
             self.recommendation = "remainsconstant"
 
-a = Company(200000, 2000000)
-b = Company(1000, 1000000)
-
 class ProblemAnswers():
     def __init__(self):
         self.price_elasticity = b.change_demand / a.change_price
         self.status = "complementary products" if self.price_elasticity < 0 \ 
                 else "substitute products" if self.price_elasticity > 0
-
-ans_ab = ProblemAnswers()
 
 # General function to safely handle user input so the program does not break so easily.
 def get_user_input(print_message, float_or_int):
@@ -138,46 +135,53 @@ def check_exact_value(user_val, value_to_check, instance_name):
     else:
         instance_name.print_msg(2)
 
+def append_wrong_msg(value_to_check, answer, msg_instance):
+    if answer < -1 and not (value_to_check < -1):
+        msg_instance.wrong += f"\nIf price elasticity is less than -1, then the price elasticity is considered elastic."
+    if answer == -1 and not(value_to_check == -1):
+        f"If price elasticity is -1, then the price elasticity is considered unitary elastic.")
+    f"If price elasticity is between -1 and 0 non-inclusive, price elasticity is considered inelastic." \
+    f"If price elasticity is 0, then price elasticity is considered perfectly inelastic."
+# FINISH THIS UP
+
+# Initialize the classes for problem setup.
+a = Company(200000, 2000000)
+b = Company(1000, 1000000)
+ans_ab = ProblemAnswers()
+
 # Set up for Company A
-print(f"Last year, Company A sold {a_sales_old:,d} units priced at ${a_price_old:.2f}.")
-print(f"This year, Company A {inc_decr} the price to ${a_price_new:.2f} and sold {a_sales_new:,d} units.")
+print(f"Last year, Company A sold {a.sales_old:,d} units priced at ${a.price_old:.2f}.")
+print(f"This year, Company A {a.inc_decr} the price to ${a.price_new:.2f} and sold {a.sales_new:,d} units.")
 
 # Price Elasticity of Company A
-print()
-user_a_price_elasticity = float(input("Enter the Price Elasticity number of Company A, rounding to 2 decimal places: "))
+a_price_elasticity = AnswerMessages()
+a_price_elasticity.correct = f"Correct! The price elasticity for Company A is {a.price_elasticity:.2f}."
+a_price_elasticity.wrong = f"The correct percent Price Elasticity for Company A was {a.price_elasticity:.2f}.")
+              f"Price elasticity is the % change in demand divided by the % change in price.\n" \
+              f"% change in demand is (new sales - old sales) / old sales * 100 or ({a_sales_new:,d} - {a_sales_old:,d}) / {a_sales_old:,d} * 100.\n" \
+              f"% change in price is (new price - old price) / old price * 100 or ({a_price_new:.2f} - {a_price_old:.2f}) / {a_price_old:.2f} * 100.\n" \
+              f"So the price elasticity is {a.change_demand}% / {a.change_price}%."
 
-a_price_elasticity_low = a_price_elasticity - 0.005
-a_price_elasticity_high = a_price_elasticity + 0.005
-
-if a_price_elasticity_low < user_a_price_elasticity < a_price_elasticity_high:
-    print(f"Correct! The price elasticity for Company A is {a_price_elasticity:.3f} (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_a_price_elasticity = float(input())
-    if a_price_elasticity_low < user_a_price_elasticity < a_price_elasticity_high:
-         print(f"Correct! The price elasticity for Company A is {a_price_elasticity:.3f} (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_a_price_elasticity = float(input())
-         if a_price_elasticity_low < user_a_price_elasticity < a_price_elasticity_high:
-              print(f"Correct! The price elasticity for Company A is {a_price_elasticity:.3f} (3 decimal places for reference).")
-         else:
-              print(f"The correct percent Price Elasticity for Company A was {a_price_elasticity:.3f} rounded up or down as necessary.")
-              print(f"Price elasticity is the % change in demand divided by the % change in price.")
-              print(f"% change in demand is (new sales - old sales) / old sales * 100 or ({a_sales_new} - {a_sales_old}) / {a_sales_old} * 100.")
-              print(f"% change in price is (new price - old price) / old price * 100 or ({a_price_new} - {a_price_old}) / {a_price_old} * 100.")
-              print(f"So the price elasticity is {a_change_demand}% / {a_change_price}%.")
 print()
 
-user_price_elastic = input("Enter \"Elastic\", \"Inelastic\", \"Unitary Elastic\" or \"Perfectly inelastic\" to describe price elasticity of Company A: ")
-if user_price_elastic == a_elastic:
-    print(f"Correct. Company A's price elasticity of {a_price_elasticity} means that the price is {a_elastic}")
+completion = False
+while completion == False:
+    user_a_price_elasticity = get_user_input("Enter the Price Elasticity number of Company A, rounding to 2 decimal places: ", float)
+    append_wrong_msg(user_a_price_elasticity, a_elastic_msg)
+    check_float_value(user_a_price_elasticity, a.price_elasticity, a_price_elasticity)
+
+a_elastic_msg = AnswerMessages()
+a_elastic_msg.correct = f"Correct. Company A's price elasticity of {a.price_elasticity:.2f} means that the price is {a.elastic}"
+a_elastic_msg.wrong = f"Company A's price elasticity was {a_elastic} because its price elasticity was {a_price_elasticity}."
+
+completion = False
+while completion == False:
+    user_price_elastic = get_user_input("Enter \"Elastic\", \"Inelastic\", \"Unitary Elastic\" or \"Perfectly inelastic\" to describe price elasticity of Company A: ", "string")
+    check_exact_value(user_price_elastic, a.elastic, a_elastic_msg)
+    
+print()
 else:
-    print(f"Company A's price elasticity was {a_elastic} because its price elasticity was {a_price_elasticity}.")
-    print(f"If price elasticity is less than -1, then the price elasticity is considered elastic.")
-    print(f"If price elasticity is -1, then the price elasticity is considered unitary elastic.")
-    print(f"If price elasticity is between -1 and 0 non-inclusive, price elasticity is considered inelastic.")
-    print(f"If price elasticity is 0, then price elasticity is considered perfectly inelastic.")
+    print(
 
 print()
 print("Enter \"increase\", \"remains constant\" or \"decrease\".")
