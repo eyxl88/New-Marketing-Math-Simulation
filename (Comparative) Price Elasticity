@@ -1,6 +1,8 @@
 # Price Elasticity and Comparitive Price Elasticity
 
 print("Welcome to Price Elasticity and Comparitive Price Elasticity Practice!")
+# TODO: MUST UPDATE THE GET USER INPUT function to have a STRING option. Splitting, stripping, lower case, non-letter removal and rejoin.
+# TODO: MUST UPDATE THE CHECK_EXACT_VALUE function to have a STRING option. Not sure if it only does ints or can compare strings.
 
 import random
 plus_minus = random.randint(0,1)
