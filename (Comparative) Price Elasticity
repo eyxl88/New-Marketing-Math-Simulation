@@ -93,6 +93,8 @@ def get_user_input(print_message, float_or_int):
     if user_input == "give up":
         return "give up"
 
+user_prev_val = "None"
+
 # General class to group and print answer messages as created by instances.
 class AnswerMessages:
     def __init__(self):
@@ -126,23 +128,28 @@ def check_float_value(user_val, value_to_check, instance_name):
 
 def check_exact_value(user_val, value_to_check, instance_name):
     global completion
+    global user_prev_val
     if user_val == "give up":
         instance_name.print_msg(3)
+        if instance_name == a_elastic_msg:
+            append_wrong_msg(user_prev_val, value_to_check)
         completion = True
     elif user_val == value_to_check:
         instance_name.print_msg(1)
         completion = True
     else:
         instance_name.print_msg(2)
+    user_prev_val = user_val
 
 def append_wrong_msg(value_to_check, answer, msg_instance):
     if answer < -1 and not (value_to_check < -1):
         msg_instance.wrong += f"\nIf price elasticity is less than -1, then the price elasticity is considered elastic."
     if answer == -1 and not(value_to_check == -1):
         f"If price elasticity is -1, then the price elasticity is considered unitary elastic.")
-    f"If price elasticity is between -1 and 0 non-inclusive, price elasticity is considered inelastic." \
-    f"If price elasticity is 0, then price elasticity is considered perfectly inelastic."
-# FINISH THIS UP
+    if -1 < answer < 0 and not(-1 < value_to_check < 0):
+        f"If price elasticity is between -1 and 0 non-inclusive, price elasticity is considered inelastic."
+    if answer == 0 and not(value_to_check == 0):
+        f"If price elasticity is 0, then price elasticity is considered perfectly inelastic."
 
 # Initialize the classes for problem setup.
 a = Company(200000, 2000000)
@@ -172,7 +179,7 @@ while completion == False:
 
 a_elastic_msg = AnswerMessages()
 a_elastic_msg.correct = f"Correct. Company A's price elasticity of {a.price_elasticity:.2f} means that the price is {a.elastic}"
-a_elastic_msg.wrong = f"Company A's price elasticity was {a_elastic} because its price elasticity was {a_price_elasticity}."
+a_elastic_msg.wrong = f"Company A's price elasticity was {a.elastic} because its price elasticity was {a.price_elasticity}."
 
 completion = False
 while completion == False:
@@ -203,39 +210,31 @@ print(f"Last year, Company A set its prices at ${a_price_old:.2f}.")
 print(f"This year Company A {inc_decr} their prices to ${a_price_new:.2f}.")
 print()
 
-# Price Elasticity of Company A
-user_ab_price_elasticity = float(input("Enter the Comparitive Price Elasticity for Companies A and B, rounding to 2 decimal places: "))
+# Comparative Price Elasticity of Company A and B
 
-ab_price_elasticity_low = ab_price_elasticity - 0.005
-ab_price_elasticity_high = ab_price_elasticity + 0.005
+ab_price_elasticity = AnswerMessages()
+ab_price_elasticity.correct = f"Correct! The CPE for Companies A and B is {ans_ab.price_elasticity:.2f}"
+ab_price_elasticity.wrong = f"The correct CPE for Companies A and B was {ans_ab.price_elasticity:.2f}.\n" \
+              f"CPE is the % change in demand for Product B divided by the % change in price for Product A.\n" \
+              f"% change in demand is (new sales - old sales) / old sales * 100 or ({b.sales_new} - {b.sales_old}) / {b.sales_old} * 100.\n" \
+              f"% change in price is (new price - old price) / old price * 100 or ({a.price_new} - {a.price_old}) / {a.price_old} * 100.\n" \
+              f"So the CPE is {b.change_demand}% / {a.change_price}%."
 
-if ab_price_elasticity_low < user_ab_price_elasticity < ab_price_elasticity_high:
-    print(f"Correct! The CPE for Companies A and B is {ab_price_elasticity:.3f} (3 decimal places for reference).")
-else:
-    print("Try again.")
-    user_ab_price_elasticity = float(input())
-    if ab_price_elasticity_low < user_ab_price_elasticity < ab_price_elasticity_high:
-         print(f"Correct! The CPE for Companies A and B is {ab_price_elasticity:.3f} (3 decimal places for reference).")
-    else:
-         print("Try again. Last try.")
-         user_ab_price_elasticity = float(input())
-         if ab_price_elasticity_low < user_ab_price_elasticity < ab_price_elasticity_high:
-              print(f"Correct! The CPE for Companies A and B is {ab_price_elasticity:.3f} (3 decimal places for reference).")
-         else:
-              print(f"The correct CPE for Companies A and B was {ab_price_elasticity:.3f} rounded up or down as necessary.")
-              print(f"CPE is the % change in demand for Product B divided by the % change in price for Product A.")
-              print(f"% change in demand is (new sales - old sales) / old sales * 100 or ({b_sales_new} - {b_sales_old}) / {b_sales_old} * 100.")
-              print(f"% change in price is (new price - old price) / old price * 100 or ({a_price_new} - {a_price_old}) / {a_price_old} * 100.")
-              print(f"So the CPE is {b_change_demand}% / {a_change_price}%.")
+completion = False
+while completion == False:
+    user_ab_price_elasticity = get_user_input("Enter the Comparitive Price Elasticity for Companies A and B,\n" \ 
+                                            "\nrounding to 2 decimal places: ", float)
+    check_float_value(user_ab_price_elasticity, ans_ab.price_elasticity, ab_price_elasticity)
+
 if ab_price_elasticity > 0:
     ab_sign = "positive"
 if ab_price_elasticity < 0:
     ab_sign = "negative"
 
 print()
-print("Enter \"subsitute products\" or \"complementary products\" (capitalization matters)")
-user_ab_status = input("Company A and Company B sell ")
-
+print("Enter \"subsitute products\" or \"complementary products\")
+user_ab_status = get_user_input("Company A and Company B sell ", "string")
+check_exact_value() # See how this is changed for STRINGS< REVIWSIONS BELOW QAND ABOVE HERE
 if user_ab_status == ab_status:
     print(f"Correct. Company A and Company B sell {ab_status} since the CPE is {ab_price_elasticity} which is {ab_sign}.")
 else:
