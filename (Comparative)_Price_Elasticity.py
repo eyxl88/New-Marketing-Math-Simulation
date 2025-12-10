@@ -245,5 +245,5 @@ else:
         print(f"If one product becomes more expensive, people are less likely to buy it as well as other products which are used with it.")
     if ab_sign == "positive":
         print("When CPE is positive, this means that an increase in price in one results in an increase in demand for the other.")
-        print(f"Positive CPE means they are subsitute products and people buy either one produce or the other.")
+        print(f"Positive CPE means they are substitute products and people buy either one produce or the other.")
         print(f"If one becomes more expensive, demand for the other cheaper product will increase.")
